@@ -18,7 +18,6 @@ import { Line } from 'react-chartjs-2';
 import { ForecastPoint } from '@/lib/econometrics-engine';
 import { CommodityData } from '@/lib/data';
 
-// Register Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -41,7 +40,6 @@ export default function TimeSeriesChart({
   forecast,
   showCI = true
 }: TimeSeriesChartProps) {
-  // Take last 12 months of historical data for compact visual balance
   const historicalToShow = commodity.historical.slice(-12);
   
   const labels = [
@@ -49,20 +47,13 @@ export default function TimeSeriesChart({
     ...forecast.map(f => f.month)
   ];
 
-  // Align historical prices (with nulls for forecast periods)
   const historicalDataPoints = [
     ...historicalToShow.map(h => h.price),
     ...forecast.map(() => null)
   ];
 
-  // Align forecast prices (with nulls for historical periods, except the very last historical point to connect the line)
   const lastHistoricalPrice = historicalToShow[historicalToShow.length - 1].price;
   
-  const forecastDataPoints = [
-    ...historicalToShow.map(() => null),
-    // Replace the first null with the last historical price to prevent disconnected lines
-  ];
-  // Re-adjust forecast index connection:
   const alignedForecast = [
     ...historicalToShow.slice(0, -1).map(() => null),
     lastHistoricalPrice,
@@ -85,19 +76,19 @@ export default function TimeSeriesChart({
     {
       label: 'Harga Historis (BPS)',
       data: historicalDataPoints,
-      borderColor: '#6366f1', // indigo-500
-      backgroundColor: 'rgba(99, 102, 241, 0.1)',
+      borderColor: '#064e3b', // Hijau Tua
+      backgroundColor: 'rgba(6, 78, 59, 0.05)',
       borderWidth: 3,
       tension: 0.3,
       spanGaps: false,
       pointRadius: 4,
-      pointBackgroundColor: '#6366f1',
+      pointBackgroundColor: '#064e3b',
       fill: false,
     },
     {
       label: 'Prediksi Model (ARIMA/GARCH)',
       data: alignedForecast,
-      borderColor: '#10b981', // emerald-500
+      borderColor: '#10b981', // Hijau Muda
       borderWidth: 3,
       borderDash: [5, 5],
       tension: 0.3,
@@ -109,25 +100,23 @@ export default function TimeSeriesChart({
   ];
 
   if (showCI) {
-    // Upper CI line
     datasets.push({
       label: 'Batas Atas CI (95%)',
       data: upperCIData,
-      borderColor: 'rgba(16, 185, 129, 0.15)',
+      borderColor: 'rgba(16, 185, 129, 0.1)',
       borderWidth: 1,
       pointRadius: 0,
       fill: false,
       spanGaps: true,
     });
-    // Lower CI line with filling from the Upper CI line
     datasets.push({
       label: 'Batas Bawah CI (95%)',
       data: lowerCIData,
-      borderColor: 'rgba(16, 185, 129, 0.15)',
+      borderColor: 'rgba(16, 185, 129, 0.1)',
       borderWidth: 1,
       pointRadius: 0,
-      backgroundColor: 'rgba(16, 185, 129, 0.08)',
-      fill: '-1', // Fill space to upper limit (previous dataset index)
+      backgroundColor: 'rgba(16, 185, 129, 0.05)',
+      fill: '-1',
       spanGaps: true,
     });
   }
@@ -144,10 +133,11 @@ export default function TimeSeriesChart({
       legend: {
         position: 'top' as const,
         labels: {
-          color: '#94a3b8',
+          color: '#475569',
           font: {
             family: 'Inter',
-            size: 11
+            size: 11,
+            weight: 'bold'
           },
           boxWidth: 15,
           usePointStyle: true
@@ -181,7 +171,7 @@ export default function TimeSeriesChart({
     scales: {
       x: {
         grid: {
-          color: 'rgba(255, 255, 255, 0.03)',
+          color: '#f1f5f9',
         },
         ticks: {
           color: '#64748b',
@@ -192,7 +182,7 @@ export default function TimeSeriesChart({
       },
       y: {
         grid: {
-          color: 'rgba(255, 255, 255, 0.05)',
+          color: '#e2e8f0',
         },
         ticks: {
           color: '#64748b',

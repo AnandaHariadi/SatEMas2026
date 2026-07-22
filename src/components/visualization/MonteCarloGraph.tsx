@@ -35,27 +35,26 @@ interface MonteCarloGraphProps {
 export default function MonteCarloGraph({ simulationData }: MonteCarloGraphProps) {
   const { paths, months, medianPath } = simulationData;
 
-  // Create datasets: 50 thin paths + 1 thick median path + 2 boundary threshold lines
   const datasets: any[] = [];
 
-  // 1. Add 50 simulated paths
+  // Add 50 simulated paths with very light green lines
   paths.forEach((path, idx) => {
     datasets.push({
       label: `Simulasi #${idx + 1}`,
       data: path,
-      borderColor: 'rgba(99, 102, 241, 0.08)', // very thin indigo lines
-      borderWidth: 1,
+      borderColor: 'rgba(16, 185, 129, 0.06)', // thin light green lines
+      borderWidth: 1.2,
       pointRadius: 0,
       tension: 0.2,
       fill: false,
     });
   });
 
-  // 2. Add Safety Corridor upper boundary (4.2%)
+  // Target Boundaries (Corridor of stability)
   datasets.push({
     label: 'Batas Atas Target (4.2%)',
     data: months.map(() => 4.2),
-    borderColor: 'rgba(239, 68, 68, 0.6)', // red-500
+    borderColor: 'rgba(239, 68, 68, 0.7)', // soft red
     borderWidth: 1.5,
     borderDash: [4, 4],
     pointRadius: 0,
@@ -63,11 +62,10 @@ export default function MonteCarloGraph({ simulationData }: MonteCarloGraphProps
     fill: false,
   });
 
-  // 3. Add Safety Corridor lower boundary (2.0%)
   datasets.push({
     label: 'Batas Bawah Target (2.0%)',
     data: months.map(() => 2.0),
-    borderColor: 'rgba(239, 68, 68, 0.6)',
+    borderColor: 'rgba(239, 68, 68, 0.7)',
     borderWidth: 1.5,
     borderDash: [4, 4],
     pointRadius: 0,
@@ -75,14 +73,14 @@ export default function MonteCarloGraph({ simulationData }: MonteCarloGraphProps
     fill: false,
   });
 
-  // 4. Add Median Path (Thick Emerald line)
+  // Median path in rich Dark Green
   datasets.push({
     label: 'Median Proyeksi Stabilitas',
     data: medianPath,
-    borderColor: '#10b981', // emerald-500
+    borderColor: '#064e3b', // Hijau Tua
     borderWidth: 4,
     pointRadius: 3,
-    pointBackgroundColor: '#10b981',
+    pointBackgroundColor: '#064e3b',
     tension: 0.15,
     fill: false,
   });
@@ -99,14 +97,14 @@ export default function MonteCarloGraph({ simulationData }: MonteCarloGraphProps
       legend: {
         position: 'top' as const,
         labels: {
-          color: '#94a3b8',
+          color: '#475569',
           font: {
             family: 'Inter',
-            size: 11
+            size: 11,
+            weight: 'bold'
           },
           boxWidth: 15,
           usePointStyle: true,
-          // Only show Median and Target labels in legend to keep it clean
           filter: (item) => {
             return (
               item.text === 'Median Proyeksi Stabilitas' ||
@@ -125,14 +123,13 @@ export default function MonteCarloGraph({ simulationData }: MonteCarloGraphProps
         padding: 10,
         callbacks: {
           label: function (context) {
-            // Only show tooltips for the median path or boundaries
             if (
               context.dataset.label === 'Median Proyeksi Stabilitas' ||
               context.dataset.label?.includes('Batas')
             ) {
               return `${context.dataset.label}: ${context.parsed.y}%`;
             }
-            return null; // hide tooltip for the 50 faint paths
+            return null;
           }
         }
       }
@@ -140,7 +137,7 @@ export default function MonteCarloGraph({ simulationData }: MonteCarloGraphProps
     scales: {
       x: {
         grid: {
-          color: 'rgba(255, 255, 255, 0.03)',
+          color: '#f1f5f9',
         },
         ticks: {
           color: '#64748b',
@@ -153,7 +150,7 @@ export default function MonteCarloGraph({ simulationData }: MonteCarloGraphProps
         min: 0,
         max: 8,
         grid: {
-          color: 'rgba(255, 255, 255, 0.05)',
+          color: '#e2e8f0',
         },
         ticks: {
           color: '#64748b',

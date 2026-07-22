@@ -12,13 +12,13 @@ export default function LearningPage() {
     <div className="flex flex-col gap-8 pb-16">
       
       {/* Header */}
-      <SectionWrapper className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <SectionWrapper className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-5">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-100 flex items-center gap-2">
-            <BookOpen className="w-6 h-6 text-indigo-400" />
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-800 flex items-center gap-2">
+            <BookOpen className="w-6 h-6 text-emerald-800" />
             Portal Edukasi Ekonomi Pangan
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-500 mt-1 font-medium">
             Pelajari transmisi kebijakan makroekonomi, teori time-series, dan uji pemahaman Anda lewat simulasi interaktif.
           </p>
         </div>
@@ -30,16 +30,16 @@ export default function LearningPage() {
         {/* Roadmap and Dictionary */}
         <div className="lg:col-span-2 flex flex-col gap-8">
           
-          <div className="glass-panel p-5 rounded-2xl border border-slate-800">
-            <h2 className="text-sm font-bold text-slate-100 mb-4 flex items-center gap-1.5 border-b border-slate-900 pb-3">
-              <GraduationCap className="w-5 h-5 text-indigo-400" />
+          <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
+            <h2 className="text-sm font-black text-slate-800 mb-4 flex items-center gap-1.5 border-b border-slate-100 pb-3">
+              <GraduationCap className="w-5 h-5 text-emerald-700" />
               Peta Pembelajaran Ekonomi Volatilitas
             </h2>
             <LearningPath />
           </div>
 
-          <div className="glass-panel p-5 rounded-2xl border border-slate-800">
-            <h2 className="text-sm font-bold text-slate-100 mb-4 flex items-center gap-1.5 border-b border-slate-900 pb-3">
+          <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
+            <h2 className="text-sm font-black text-slate-800 mb-4 flex items-center gap-1.5 border-b border-slate-100 pb-3">
               Kamus Istilah Ekonometrika & Fiskal
             </h2>
             <GlossaryEconomics />
@@ -49,12 +49,12 @@ export default function LearningPage() {
 
         {/* Interactive Quiz */}
         <div className="lg:col-span-1 flex flex-col gap-6">
-          <div className="glass-panel p-5 rounded-2xl border border-slate-800 flex flex-col h-full justify-between">
-            <div className="border-b border-slate-900 pb-3 mb-4">
-              <h2 className="text-sm font-bold text-slate-100">
-                Uji Kompetensi Kualitatif
+          <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex flex-col h-full justify-between">
+            <div className="border-b border-slate-100 pb-3 mb-4">
+              <h2 className="text-sm font-black text-slate-800">
+                Uji Kompetensi Pangan
               </h2>
-              <p className="text-[10px] text-slate-500 mt-0.5">
+              <p className="text-[10px] text-slate-500 mt-0.5 font-medium">
                 Uji penalaran Anda tentang transmisi logistik, subsidi, dan pemodelan statistik pangan.
               </p>
             </div>
@@ -63,8 +63,8 @@ export default function LearningPage() {
               <QuizModule />
             </div>
 
-            <div className="mt-4 p-3 rounded-xl bg-slate-950 border border-slate-900 flex gap-2 text-[10px] text-slate-500 leading-normal">
-              <ShieldAlert className="w-5 h-5 text-indigo-500 shrink-0" />
+            <div className="mt-4 p-3 rounded-xl bg-slate-50 border border-slate-200 flex gap-2 text-[10px] text-slate-500 leading-normal font-medium">
+              <ShieldAlert className="w-5 h-5 text-emerald-700 shrink-0" />
               <span>
                 Kuis ini dirancang untuk mahasiswa makroekonomi, praktisi fiskal daerah, dan masyarakat umum guna memahami kebijakan pangan nasional secara obyektif.
               </span>

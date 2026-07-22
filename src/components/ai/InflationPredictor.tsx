@@ -6,7 +6,7 @@ import { runARIMAForecast, runGARCHForecast, ForecastPoint } from '@/lib/econome
 import TimeSeriesChart from '../visualization/TimeSeriesChart';
 import AnimatedCounter from '../ui/AnimatedCounter';
 import GradientButton from '../ui/GradientButton';
-import { Settings, BarChart2, Calendar, ShieldCheck, Cpu, RefreshCw, FileSpreadsheet } from 'lucide-react';
+import { Settings, BarChart2, Calendar, FileSpreadsheet, RefreshCw } from 'lucide-react';
 
 export default function InflationPredictor() {
   const [selectedCommId, setSelectedCommId] = useState(COMMODITIES[0].id);
@@ -34,13 +34,11 @@ export default function InflationPredictor() {
     });
   };
 
-  // Run calculation initially and on slider changes
   useEffect(() => {
     calculateForecast();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCommId, modelType, phi, theta, omega, alpha, beta]);
 
-  // Key summary statistics from forecast
   const lastForecastPoint = forecast[forecast.length - 1] || { price: 0, lowerCI: 0, upperCI: 0 };
   const basePrice = selectedComm.currentPrice;
   const pctChange = basePrice > 0 ? ((lastForecastPoint.price - basePrice) / basePrice) * 100 : 0;
@@ -52,9 +50,9 @@ export default function InflationPredictor() {
       <div className="lg:col-span-1 flex flex-col gap-6">
         
         {/* Commodity Select Card */}
-        <div className="glass-panel p-5 rounded-2xl border border-slate-800">
-          <h3 className="text-xs uppercase font-bold tracking-widest text-slate-400 mb-4 flex items-center gap-1.5">
-            <Calendar className="w-4 h-4 text-indigo-400" />
+        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
+          <h3 className="text-xs uppercase font-bold tracking-widest text-[#064e3b] mb-4 flex items-center gap-1.5 border-b border-slate-100 pb-2">
+            <Calendar className="w-4 h-4 text-emerald-700" />
             Pilih Komoditas Pangan
           </h3>
           <div className="flex flex-col gap-2">
@@ -62,21 +60,21 @@ export default function InflationPredictor() {
               <button
                 key={c.id}
                 onClick={() => setSelectedCommId(c.id)}
-                className={`w-full text-left p-3.5 rounded-xl border transition-all text-xs flex justify-between items-center cursor-pointer ${
+                className={`w-full text-left p-3 rounded-xl border transition-all text-xs flex justify-between items-center cursor-pointer ${
                   selectedCommId === c.id
-                    ? 'bg-emerald-500/10 border-emerald-500/30 text-slate-100 shadow-[0_0_15px_rgba(16,185,129,0.05)]'
-                    : 'bg-slate-900/40 border-slate-900 text-slate-400 hover:border-slate-800 hover:text-slate-300'
+                    ? 'bg-emerald-50/50 border-emerald-400 text-slate-800 font-bold shadow-sm'
+                    : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700'
                 }`}
               >
                 <div>
-                  <span className="font-bold block">{c.name}</span>
-                  <span className="text-[10px] text-slate-500">{c.category}</span>
+                  <span className="block">{c.name}</span>
+                  <span className="text-[10px] text-slate-400 font-normal">{c.category}</span>
                 </div>
                 <div className="text-right">
-                  <span className="font-bold block">Rp {c.currentPrice.toLocaleString('id-ID')}</span>
+                  <span className="block text-slate-850">Rp {c.currentPrice.toLocaleString('id-ID')}</span>
                   <span className={`text-[9px] font-semibold px-2 py-0.5 rounded-full ${
-                    c.volatilityRating === 'High' ? 'bg-red-500/10 text-red-400' :
-                    c.volatilityRating === 'Medium' ? 'bg-amber-500/10 text-amber-400' : 'bg-emerald-500/10 text-emerald-400'
+                    c.volatilityRating === 'High' ? 'bg-red-100 text-red-700' :
+                    c.volatilityRating === 'Medium' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-800'
                   }`}>
                     {c.volatilityRating} Vol
                   </span>
@@ -86,19 +84,19 @@ export default function InflationPredictor() {
           </div>
         </div>
 
-        {/* Model Select and Parameters Card */}
-        <div className="glass-panel p-5 rounded-2xl border border-slate-800">
-          <h3 className="text-xs uppercase font-bold tracking-widest text-slate-400 mb-4 flex items-center gap-1.5">
-            <Settings className="w-4 h-4 text-indigo-400" />
+        {/* Model Select Card */}
+        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
+          <h3 className="text-xs uppercase font-bold tracking-widest text-[#064e3b] mb-4 flex items-center gap-1.5 border-b border-slate-100 pb-2">
+            <Settings className="w-4 h-4 text-emerald-700" />
             Parameter Ekonometrika
           </h3>
 
           {/* Model Switcher */}
-          <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-900 mb-6">
+          <div className="flex bg-slate-50 p-1 rounded-xl border border-slate-200 mb-6">
             <button
               onClick={() => setModelType('ARIMA')}
               className={`flex-1 py-2 text-center text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                modelType === 'ARIMA' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
+                modelType === 'ARIMA' ? 'bg-[#064e3b] text-white shadow-sm' : 'text-slate-550 hover:text-slate-800'
               }`}
             >
               ARIMA (1,1,1)
@@ -106,86 +104,84 @@ export default function InflationPredictor() {
             <button
               onClick={() => setModelType('GARCH')}
               className={`flex-1 py-2 text-center text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                modelType === 'GARCH' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
+                modelType === 'GARCH' ? 'bg-[#064e3b] text-white shadow-sm' : 'text-slate-550 hover:text-slate-800'
               }`}
             >
               GARCH (1,1)
             </button>
           </div>
 
-          {/* Dynamic Parameter Sliders */}
+          {/* Sliders */}
           <div className="flex flex-col gap-5">
             {modelType === 'ARIMA' ? (
               <>
-                {/* ARIMA Parameters */}
                 <div>
-                  <div className="flex justify-between text-xs mb-1.5">
-                    <span className="text-slate-400 font-medium">Koefisien AR (Phi: &phi;)</span>
-                    <span className="text-indigo-400 font-bold">{phi.toFixed(2)}</span>
+                  <div className="flex justify-between text-xs mb-1.5 font-bold">
+                    <span className="text-slate-600">Koefisien AR (Phi: &phi;)</span>
+                    <span className="text-emerald-700">{phi.toFixed(2)}</span>
                   </div>
                   <input
                     type="range" min="0.05" max="0.95" step="0.05" value={phi}
                     onChange={(e) => setPhi(parseFloat(e.target.value))}
-                    className="w-full h-1.5 bg-slate-850 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                    className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#064e3b]"
                   />
-                  <span className="text-[10px] text-slate-500 mt-1 block">Persistensi efek lag harga sebelumnya</span>
+                  <span className="text-[10px] text-slate-400 mt-1 block">Persistensi efek lag harga sebelumnya</span>
                 </div>
                 <div>
-                  <div className="flex justify-between text-xs mb-1.5">
-                    <span className="text-slate-400 font-medium">Koefisien MA (Theta: &theta;)</span>
-                    <span className="text-indigo-400 font-bold">{theta.toFixed(2)}</span>
+                  <div className="flex justify-between text-xs mb-1.5 font-bold">
+                    <span className="text-slate-600">Koefisien MA (Theta: &theta;)</span>
+                    <span className="text-emerald-700">{theta.toFixed(2)}</span>
                   </div>
                   <input
                     type="range" min="-0.95" max="-0.05" step="0.05" value={theta}
                     onChange={(e) => setTheta(parseFloat(e.target.value))}
-                    className="w-full h-1.5 bg-slate-850 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                    className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#064e3b]"
                   />
-                  <span className="text-[10px] text-slate-500 mt-1 block">Penyesuaian lag residual error acak</span>
+                  <span className="text-[10px] text-slate-400 mt-1 block">Penyesuaian lag residual error acak</span>
                 </div>
               </>
             ) : (
               <>
-                {/* GARCH Parameters */}
                 <div>
-                  <div className="flex justify-between text-xs mb-1.5">
-                    <span className="text-slate-400 font-medium">Constant (Omega: &omega;)</span>
-                    <span className="text-indigo-400 font-bold">{omega.toFixed(3)}</span>
+                  <div className="flex justify-between text-xs mb-1.5 font-bold">
+                    <span className="text-slate-600">Constant (Omega: &omega;)</span>
+                    <span className="text-emerald-700">{omega.toFixed(3)}</span>
                   </div>
                   <input
                     type="range" min="0.01" max="0.5" step="0.01" value={omega}
                     onChange={(e) => setOmega(parseFloat(e.target.value))}
-                    className="w-full h-1.5 bg-slate-850 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                    className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#064e3b]"
                   />
-                  <span className="text-[10px] text-slate-500 mt-1 block">Varians baseline jangka panjang</span>
+                  <span className="text-[10px] text-slate-400 mt-1 block">Varians baseline jangka panjang</span>
                 </div>
                 <div>
-                  <div className="flex justify-between text-xs mb-1.5">
-                    <span className="text-slate-400 font-medium">ARCH Effect (Alpha: &alpha;)</span>
-                    <span className="text-indigo-400 font-bold">{alpha.toFixed(2)}</span>
+                  <div className="flex justify-between text-xs mb-1.5 font-bold">
+                    <span className="text-slate-600">ARCH Effect (Alpha: &alpha;)</span>
+                    <span className="text-emerald-700">{alpha.toFixed(2)}</span>
                   </div>
                   <input
                     type="range" min="0.05" max="0.30" step="0.01" value={alpha}
                     onChange={(e) => setAlpha(parseFloat(e.target.value))}
-                    className="w-full h-1.5 bg-slate-850 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                    className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#064e3b]"
                   />
-                  <span className="text-[10px] text-slate-500 mt-1 block">Sensitivitas kuadrat error shock sebelumnya</span>
+                  <span className="text-[10px] text-slate-400 mt-1 block">Sensitivitas kuadrat error shock sebelumnya</span>
                 </div>
                 <div>
-                  <div className="flex justify-between text-xs mb-1.5">
-                    <span className="text-slate-400 font-medium">GARCH Persistence (Beta: &beta;)</span>
-                    <span className="text-indigo-400 font-bold">{beta.toFixed(2)}</span>
+                  <div className="flex justify-between text-xs mb-1.5 font-bold">
+                    <span className="text-slate-600">GARCH Persistence (Beta: &beta;)</span>
+                    <span className="text-emerald-700">{beta.toFixed(2)}</span>
                   </div>
                   <input
                     type="range" min="0.50" max="0.90" step="0.02" value={beta}
                     onChange={(e) => setBeta(parseFloat(e.target.value))}
-                    className="w-full h-1.5 bg-slate-850 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                    className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#064e3b]"
                   />
-                  <span className="text-[10px] text-slate-500 mt-1 block">Tingkat kelengketan volatilitas pasar</span>
+                  <span className="text-[10px] text-slate-400 mt-1 block">Tingkat kelengketan volatilitas pasar</span>
                 </div>
               </>
             )}
             
-            <div className="mt-2 border-t border-slate-900 pt-4 flex gap-2">
+            <div className="mt-2 border-t border-slate-100 pt-4 flex gap-2">
               <GradientButton variant="glass" onClick={calculateForecast} className="flex-1 text-xs">
                 <RefreshCw className={`w-3.5 h-3.5 ${isPending ? 'animate-spin' : ''}`} /> Sinkron
               </GradientButton>
@@ -201,48 +197,48 @@ export default function InflationPredictor() {
         {/* Quick Numbers */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           
-          <div className="glass-panel p-4 rounded-xl border border-slate-800/80">
-            <span className="text-[10px] text-slate-400 block mb-1">Rata-Rata Harga Des 2026</span>
-            <div className="text-xl font-black text-slate-100">
+          <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block mb-1">Rata-Rata Harga Des 2026</span>
+            <div className="text-xl font-black text-slate-800">
               Rp <AnimatedCounter value={lastForecastPoint.price} />
             </div>
-            <span className={`text-[10px] flex items-center gap-1 ${pctChange >= 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
+            <span className={`text-[10px] font-bold flex items-center gap-1 ${pctChange >= 0 ? 'text-amber-600' : 'text-emerald-600'}`}>
               {pctChange >= 0 ? 'Proyeksi Naik' : 'Proyeksi Turun'} {Math.abs(pctChange).toFixed(1)}%
             </span>
           </div>
 
-          <div className="glass-panel p-4 rounded-xl border border-slate-800/80">
-            <span className="text-[10px] text-slate-400 block mb-1">Batas Bawah CI (Optimal)</span>
-            <div className="text-xl font-black text-emerald-400">
+          <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block mb-1">Batas Bawah CI (Optimal)</span>
+            <div className="text-xl font-black text-emerald-700">
               Rp <AnimatedCounter value={lastForecastPoint.lowerCI} />
             </div>
-            <span className="text-[10px] text-slate-500 block">Probabilitas batas 95%</span>
+            <span className="text-[9px] text-slate-400 block">Batas bawah keamanan pasok BPS</span>
           </div>
 
-          <div className="glass-panel p-4 rounded-xl border border-slate-800/80">
-            <span className="text-[10px] text-slate-400 block mb-1">Batas Atas CI (Terburuk)</span>
-            <div className="text-xl font-black text-red-400">
+          <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block mb-1">Batas Atas CI (Terburuk)</span>
+            <div className="text-xl font-black text-red-600">
               Rp <AnimatedCounter value={lastForecastPoint.upperCI} />
             </div>
-            <span className="text-[10px] text-slate-500 block">Risiko harga di pasar retail</span>
+            <span className="text-[9px] text-slate-400 block">Risiko harga konsumen tertinggi</span>
           </div>
 
         </div>
 
-        {/* The Forecasting Chart */}
-        <div className="glass-panel p-5 rounded-2xl border border-slate-800 flex-1 flex flex-col min-h-[380px]">
-          <div className="flex justify-between items-center border-b border-slate-900 pb-3 mb-4">
+        {/* TimeSeries Chart */}
+        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex-1 flex flex-col min-h-[380px]">
+          <div className="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
             <div>
-              <h3 className="text-sm font-bold text-slate-100">
-                Grafik Run Time-Series {selectedComm.name} ({modelType})
+              <h3 className="text-sm font-black text-slate-800">
+                Visualisasi Peramalan Time-Series {selectedComm.name} ({modelType})
               </h3>
-              <p className="text-[10px] text-slate-500">
-                Pita berbayang mewakili 95% confidence intervals dari residual kuadrat
+              <p className="text-[10px] text-slate-455">
+                Daerah teduh hijau merepresentasikan interval keyakinan 95% dari bias residual
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] text-emerald-400 uppercase font-bold tracking-wider">Predictive Mode</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
+              <span className="text-[9px] text-emerald-800 uppercase font-black tracking-wider">Predictive Mode Active</span>
             </div>
           </div>
           
@@ -252,38 +248,36 @@ export default function InflationPredictor() {
         </div>
 
         {/* Tabular Data View */}
-        <div className="glass-panel p-5 rounded-2xl border border-slate-800">
-          <div className="flex justify-between items-center border-b border-slate-900 pb-3 mb-4">
-            <div>
-              <h4 className="text-xs uppercase font-bold tracking-widest text-slate-400 flex items-center gap-1.5">
-                <FileSpreadsheet className="w-4 h-4 text-indigo-400" />
-                Matriks Tabel Proyeksi Bulanan (2026)
-              </h4>
-            </div>
-            <button className="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-3 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer">
-              Ekspor Data CSV
+        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
+          <div className="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
+            <h4 className="text-xs uppercase font-black tracking-widest text-[#064e3b] flex items-center gap-1.5">
+              <FileSpreadsheet className="w-4 h-4" />
+              Data Angka Proyeksi Bulanan (Tahun Buku 2026)
+            </h4>
+            <button className="text-[9px] font-bold bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer">
+              Ekspor CSV
             </button>
           </div>
           
-          <div className="overflow-x-auto max-h-[200px] overflow-y-auto">
+          <div className="overflow-x-auto max-h-[180px] overflow-y-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-slate-850 text-slate-500 font-bold">
+                <tr className="border-b border-slate-200 text-slate-500 font-bold">
                   <th className="py-2.5">Bulan</th>
-                  <th className="py-2.5 text-right">Rata-Rata Proyeksi</th>
-                  <th className="py-2.5 text-right text-emerald-500/80">Batas Bawah CI (95%)</th>
-                  <th className="py-2.5 text-right text-red-500/80">Batas Atas CI (95%)</th>
-                  <th className="py-2.5 text-right text-slate-500">Volatilitas (&sigma;)</th>
+                  <th className="py-2.5 text-right text-slate-850">Rata-Rata Proyeksi</th>
+                  <th className="py-2.5 text-right text-emerald-700">Batas Bawah CI (95%)</th>
+                  <th className="py-2.5 text-right text-red-700">Batas Atas CI (95%)</th>
+                  <th className="py-2.5 text-right text-slate-400">Volatilitas (&sigma;)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-850/60 text-slate-300">
+              <tbody className="divide-y divide-slate-100 text-slate-600 font-medium">
                 {forecast.map((f, idx) => (
-                  <tr key={idx} className="hover:bg-slate-900/30">
-                    <td className="py-2">{f.month}</td>
-                    <td className="py-2 text-right font-bold">Rp {f.price.toLocaleString('id-ID')}</td>
-                    <td className="py-2 text-right text-emerald-400/80">Rp {f.lowerCI.toLocaleString('id-ID')}</td>
-                    <td className="py-2 text-right text-red-400/80">Rp {f.upperCI.toLocaleString('id-ID')}</td>
-                    <td className="py-2 text-right text-slate-500">{f.volatility.toFixed(4)}</td>
+                  <tr key={idx} className="hover:bg-slate-50/50">
+                    <td className="py-2 font-mono">{f.month}</td>
+                    <td className="py-2 text-right font-bold text-slate-800">Rp {f.price.toLocaleString('id-ID')}</td>
+                    <td className="py-2 text-right text-emerald-600 font-bold">Rp {f.lowerCI.toLocaleString('id-ID')}</td>
+                    <td className="py-2 text-right text-red-500">Rp {f.upperCI.toLocaleString('id-ID')}</td>
+                    <td className="py-2 text-right text-slate-400 font-mono">{f.volatility.toFixed(4)}</td>
                   </tr>
                 ))}
               </tbody>

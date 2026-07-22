@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Sparkles, HelpCircle, GraduationCap, Play, HelpCircle as HelpIcon } from 'lucide-react';
+import { Send, Bot, User, Sparkles, HelpCircle, GraduationCap, X, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { runARIMAForecast, runMonteCarloSimulation, SimulationResult } from '@/lib/econometrics-engine';
-import { COMMODITIES } from '@/lib/data';
+import { runARIMAForecast, runMonteCarloSimulation } from '@/lib/econometrics-engine';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 
@@ -26,10 +25,11 @@ interface Message {
 }
 
 export default function AIChatbot() {
+  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       sender: 'ai',
-      text: 'Halo! Saya SATRISNA Econometric Advisor. Saya di sini untuk membantu Anda menganalisis prediksi inflasi pangan, memahami model ekonometrika ARIMA/GARCH, serta mensimulasikan dampak kebijakan fiskal menuju Indonesia Emas 2045. Ada yang ingin Anda diskusikan?',
+      text: 'Halo! Saya SATRISNA Econometric Advisor. Saya di sini untuk membantu Anda menganalisis prediksi inflasi pangan, memahami model ekonometrika ARIMA/GARCH, serta mensimulasikan dampak kebijakan fiskal menuju Indonesia Emas 2045. Ada yang ingin Anda tanyakan?',
       timestamp: new Date()
     }
   ]);
@@ -42,20 +42,21 @@ export default function AIChatbot() {
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages, isTyping]);
+    if (isOpen) {
+      scrollToBottom();
+    }
+  }, [messages, isTyping, isOpen]);
 
   const quickActions = [
     { label: 'Prediksi Beras (ARIMA)', query: 'Tampilkan prediksi beras arima' },
     { label: 'Simulasi Impor 1 Jt Ton', query: 'Simulasikan impor beras 1 juta ton' },
     { label: 'ELI5 Inflasi Cabai', query: 'Jelaskan mengapa harga cabai naik bikin inflasi (ELI5)' },
-    { label: 'Mulai Mini Kuis Chat', query: 'Mulai mini kuis chat' }
+    { label: 'Mulai Kuis Chat', query: 'Mulai mini kuis chat' }
   ];
 
-  // Helper: renders a compact ARIMA line chart inside the chat bubble
   const renderMiniArima = (commodityId: string) => {
     const forecast = runARIMAForecast(commodityId);
-    const labels = forecast.map(f => f.month.substring(5)); // show "MM" format
+    const labels = forecast.map(f => f.month.substring(5));
     const prices = forecast.map(f => f.price);
     
     const data = {
@@ -83,20 +84,18 @@ export default function AIChatbot() {
       },
       scales: {
         x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 8 } } },
-        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 8 } } }
+        y: { grid: { color: '#f1f5f9' }, ticks: { color: '#64748b', font: { size: 8 } } }
       }
     };
 
     return (
-      <div className="w-full h-36 bg-slate-950 p-2 rounded-xl border border-slate-900 mt-2">
+      <div className="w-full h-32 bg-white p-2 rounded-lg border border-slate-200 mt-2">
         <Line data={data} options={options as any} />
       </div>
     );
   };
 
-  // Helper: renders a compact Monte Carlo chart inside the chat bubble
   const renderMiniMonteCarlo = (importVolume: number) => {
-    // Run simulation for the given import volume
     const sim = runMonteCarloSimulation(40, importVolume, 50, 'Medium');
     const labels = sim.months.map(m => m.substring(5));
     
@@ -104,7 +103,7 @@ export default function AIChatbot() {
       {
         label: 'Median Path',
         data: sim.medianPath,
-        borderColor: '#10b981',
+        borderColor: '#064e3b',
         borderWidth: 3,
         pointRadius: 2,
         fill: false,
@@ -112,12 +111,11 @@ export default function AIChatbot() {
       }
     ];
 
-    // Add 8 paths to keep chart lightweight inside chat
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 5; i++) {
       datasets.push({
         label: `Path #${i+1}`,
         data: sim.paths[i],
-        borderColor: 'rgba(99, 102, 241, 0.12)',
+        borderColor: 'rgba(16, 185, 129, 0.08)',
         borderWidth: 1,
         pointRadius: 0,
         fill: false,
@@ -135,13 +133,13 @@ export default function AIChatbot() {
       },
       scales: {
         x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 8 } } },
-        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 8 } } }
+        y: { grid: { color: '#f1f5f9' }, ticks: { color: '#64748b', font: { size: 8 } } }
       }
     };
 
     return (
-      <div className="w-full h-36 bg-slate-950 p-2 rounded-xl border border-slate-900 mt-2 flex flex-col gap-1">
-        <div className="flex justify-between text-[8px] text-slate-500 px-1">
+      <div className="w-full h-32 bg-white p-2 rounded-lg border border-slate-200 mt-2 flex flex-col gap-1">
+        <div className="flex justify-between text-[7px] text-slate-500 px-1 font-bold">
           <span>Stabilitas: {sim.stabilityProbability}%</span>
           <span>APBN: Rp {sim.averageBudgetCost.toFixed(1)}T</span>
         </div>
@@ -157,10 +155,7 @@ export default function AIChatbot() {
       const updated = [...prev];
       const targetMsg = updated[messageIdx];
       if (targetMsg && targetMsg.miniQuiz) {
-        targetMsg.miniQuiz = {
-          ...targetMsg.miniQuiz,
-          userSelected: optionIdx
-        };
+        targetMsg.miniQuiz = { ...targetMsg.miniQuiz, userSelected: optionIdx };
       }
       return updated;
     });
@@ -186,13 +181,13 @@ export default function AIChatbot() {
       const query = textToSend.toLowerCase();
 
       if (query.includes('prediksi') && (query.includes('beras') || query.includes('arima'))) {
-        replyText = 'Berikut adalah grafik peramalan ARIMA(1,1,1) untuk Beras Premium selama 12 bulan ke depan (Januari 2026 - Desember 2026). Tren menunjukkan kenaikan perlahan dipicu inflasi musiman awal tahun.';
+        replyText = 'Berikut proyeksi ARIMA(1,1,1) Beras Premium 12 bulan ke depan (Jan - Des 2026). Tren menunjukkan kenaikan musiman di awal tahun.';
         chartType = 'arima';
       } else if (query.includes('impor') || query.includes('monte carlo') || query.includes('simulasikan')) {
-        replyText = 'Berdasarkan simulasi Monte Carlo (kombinasi subsidi pupuk 40%, Bulog 50%, dan kuota impor beras 1.0 Juta Ton), probabilitas stabilitas pangan berada pada koridor aman dengan visualisasi jalur acak di bawah ini:';
+        replyText = 'Hasil simulasi Monte Carlo untuk kuota impor beras 1.0 Juta Ton dengan alokasi Bulog 50% menunjukkan sebaran kestabilan sebagai berikut:';
         chartType = 'montecarlo';
       } else if (query.includes('eli5') || query.includes('jelaskan') || query.includes('anak kecil')) {
-        replyText = '👶 *ELI5 (Sederhananya)*:\n\nKalau harga cabai rawit naik, inflasi makanan ikut naik karena hampir semua masakan Indonesia pakai cabai. Karena semua orang butuh beli cabai setiap hari, naiknya harga cabai bikin dompet ibu-ibu cepat kosong untuk membeli makanan pokok lainnya. Inilah yang disebut BPS sebagai inflasi volatile food!';
+        replyText = '👶 *ELI5 (Sederhananya)*:\n\nKalau harga cabai rawit naik, inflasi makanan ikut naik karena hampir semua masakan Indonesia pakai cabai. Karena semua orang butuh beli cabai setiap hari, naiknya harga cabai bikin dompet cepat kosong untuk membeli makanan pokok lainnya. Inilah yang disebut BPS sebagai inflasi volatile food!';
       } else if (query.includes('kuis') || query.includes('quiz') || query.includes('mulai')) {
         replyText = 'Ayo uji pemahaman Anda lewat kuis chat mini ini! Silakan pilih jawaban Anda pada panel interaktif di bawah:';
         miniQuiz = {
@@ -206,7 +201,7 @@ export default function AIChatbot() {
           explanation: 'Subsidi pupuk memotong Harga Pokok Produksi (HPP) input tani, sehingga menurunkan harga panen beras eceran.'
         };
       } else {
-        replyText = 'Pertanyaan Anda sangat penting! Dari perspektif sistem keputusan pendukung (DSS) SATRISNA, koordinasi instrumen fiskal APBN (seperti subsidi pupuk) dan logistik Bulog (SPHP) memiliki tingkat korelasi tertinggi untuk menjaga stabilitas volatile food di kisaran target 2.0% - 4.2%. Coba tanyakan "Tampilkan prediksi beras arima" atau "Mulai mini kuis chat"!';
+        replyText = 'Pertanyaan Anda sangat penting! Koordinasi instrumen fiskal APBN (seperti subsidi pupuk) dan logistik Bulog (SPHP) memiliki tingkat korelasi tertinggi untuk menjaga stabilitas volatile food. Coba tanyakan "Tampilkan prediksi beras arima" atau "Mulai kuis chat"!';
       }
 
       setMessages(prev => [...prev, {
@@ -221,158 +216,185 @@ export default function AIChatbot() {
   };
 
   return (
-    <div className="flex flex-col h-[520px] rounded-2xl glass-panel overflow-hidden border border-slate-800">
-      
-      {/* Chat header */}
-      <div className="p-4 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
-            <Bot className="w-4 h-4 text-emerald-400" />
-          </div>
-          <div>
-            <span className="font-bold text-sm text-slate-100 block">Asisten SATRISNA AI</span>
-            <span className="text-[10px] text-emerald-400 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping" />
-              ARIMA/GARCH Engine Online
-            </span>
-          </div>
-        </div>
-        <Sparkles className="w-4.5 h-4.5 text-indigo-400" />
-      </div>
+    <>
+      {/* 1. Floating Action Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed bottom-6 right-6 z-50 p-4 bg-gradient-to-r from-emerald-800 to-emerald-600 hover:from-emerald-700 hover:to-emerald-500 text-white rounded-full shadow-lg shadow-emerald-800/20 flex items-center justify-center cursor-pointer group transition-all duration-300"
+      >
+        <MessageSquare className="w-5 h-5 group-hover:scale-110 transition-transform" />
+        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 ease-out font-bold text-xs whitespace-nowrap pl-0 group-hover:pl-2">
+          Tanya SATRISNA AI
+        </span>
+      </button>
 
-      {/* Messages viewport */}
-      <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-4 bg-slate-950/20">
-        <AnimatePresence>
-          {messages.map((msg, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`flex gap-3 max-w-[88%] ${msg.sender === 'user' ? 'self-end flex-row-reverse' : 'self-start'}`}
-            >
-              <div className={`w-8 h-8 rounded-lg shrink-0 flex items-center justify-center border ${
-                msg.sender === 'user' 
-                  ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' 
-                  : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-              }`}>
-                {msg.sender === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+      {/* 2. Chat Overlay Box */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 50, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed bottom-24 right-6 z-50 w-[350px] sm:w-[380px] h-[520px] bg-white rounded-2xl border border-slate-200 shadow-2xl flex flex-col overflow-hidden"
+          >
+            {/* Header */}
+            <div className="p-4 bg-gradient-to-r from-[#032215] to-[#064e3b] text-white flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                  <Bot className="w-4 h-4 text-emerald-400" />
+                </div>
+                <div>
+                  <span className="font-bold text-xs block">Official SATRISNA AI Helpdesk</span>
+                  <span className="text-[9px] text-emerald-400 flex items-center gap-1">
+                    <span className="w-1 h-1 bg-emerald-400 rounded-full animate-ping" />
+                    BPS/BI Econometrics Engine
+                  </span>
+                </div>
               </div>
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="p-1 rounded-md hover:bg-white/10 text-white/80 hover:text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
 
-              <div className={`p-3.5 rounded-xl text-xs leading-relaxed ${
-                msg.sender === 'user'
-                  ? 'bg-indigo-600 text-white rounded-tr-none'
-                  : 'bg-slate-900/80 text-slate-200 rounded-tl-none border border-slate-800'
-              }`}>
-                <div className="whitespace-pre-line">{msg.text}</div>
-                
-                {/* Visual outputs rendered directly inline */}
-                {msg.chartType === 'arima' && renderMiniArima('beras')}
-                {msg.chartType === 'montecarlo' && renderMiniMonteCarlo(1.0)}
-
-                {/* Inline Mini Quiz Render */}
-                {msg.miniQuiz && (
-                  <div className="mt-3 bg-slate-950/80 p-3 rounded-lg border border-slate-850 flex flex-col gap-2">
-                    <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1">
-                      <GraduationCap className="w-3.5 h-3.5 text-indigo-400" /> Mini Kuis Chat
-                    </span>
-                    <p className="font-semibold text-slate-200 mb-1">{msg.miniQuiz.question}</p>
-                    
-                    <div className="flex flex-col gap-1.5">
-                      {msg.miniQuiz.options.map((opt, oIdx) => {
-                        const isSelected = msg.miniQuiz?.userSelected === oIdx;
-                        const isCorrect = oIdx === msg.miniQuiz?.correctIndex;
-                        const hasSelected = msg.miniQuiz?.userSelected !== undefined;
-
-                        let btnStyle = 'bg-slate-900 border-slate-850 text-slate-450 hover:bg-slate-850';
-                        if (isSelected) btnStyle = 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300';
-                        if (hasSelected) {
-                          if (isCorrect) btnStyle = 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300';
-                          else if (isSelected) btnStyle = 'bg-red-500/20 border-red-500/40 text-red-300 line-through';
-                          else btnStyle = 'bg-slate-900/50 border-slate-900/50 text-slate-600';
-                        }
-
-                        return (
-                          <button
-                            key={oIdx}
-                            disabled={hasSelected}
-                            onClick={() => handleMiniQuizAnswer(idx, oIdx)}
-                            className={`w-full text-left p-2.5 rounded-lg border text-[10px] transition-all cursor-pointer ${btnStyle}`}
-                          >
-                            {opt}
-                          </button>
-                        );
-                      })}
+            {/* Chat Messages */}
+            <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-4 bg-slate-50/50">
+              <AnimatePresence>
+                {messages.map((msg, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`flex gap-2.5 max-w-[88%] ${msg.sender === 'user' ? 'self-end flex-row-reverse' : 'self-start'}`}
+                  >
+                    <div className={`w-7 h-7 rounded-md shrink-0 flex items-center justify-center border text-xs ${
+                      msg.sender === 'user' 
+                        ? 'bg-emerald-50 border-emerald-100 text-emerald-800' 
+                        : 'bg-slate-100 border-slate-200 text-slate-600'
+                    }`}>
+                      {msg.sender === 'user' ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
                     </div>
 
-                    {msg.miniQuiz.userSelected !== undefined && (
-                      <div className="mt-2 text-[10px] text-slate-400 leading-normal border-t border-slate-900 pt-2">
-                        <span className="font-bold text-emerald-400 block mb-0.5">Penjelasan:</span>
-                        {msg.miniQuiz.explanation}
-                      </div>
-                    )}
+                    <div className={`p-3 rounded-xl text-xs leading-relaxed ${
+                      msg.sender === 'user'
+                        ? 'bg-[#064e3b] text-white rounded-tr-none'
+                        : 'bg-white text-slate-800 rounded-tl-none border border-slate-200 shadow-sm'
+                    }`}>
+                      <div className="whitespace-pre-line font-medium">{msg.text}</div>
+                      
+                      {msg.chartType === 'arima' && renderMiniArima('beras')}
+                      {msg.chartType === 'montecarlo' && renderMiniMonteCarlo(1.0)}
+
+                      {/* Mini Quiz */}
+                      {msg.miniQuiz && (
+                        <div className="mt-3 bg-slate-50 p-2.5 rounded-lg border border-slate-200 flex flex-col gap-2">
+                          <span className="text-[8px] text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1">
+                            <GraduationCap className="w-3.5 h-3.5 text-emerald-700" /> Mini Kuis Chat
+                          </span>
+                          <p className="font-bold text-slate-800 mb-1 leading-snug">{msg.miniQuiz.question}</p>
+                          
+                          <div className="flex flex-col gap-1.5">
+                            {msg.miniQuiz.options.map((opt, oIdx) => {
+                              const isSelected = msg.miniQuiz?.userSelected === oIdx;
+                              const isCorrect = oIdx === msg.miniQuiz?.correctIndex;
+                              const hasSelected = msg.miniQuiz?.userSelected !== undefined;
+
+                              let btnStyle = 'bg-white border-slate-200 text-slate-600 hover:bg-slate-100';
+                              if (isSelected) btnStyle = 'bg-emerald-50 border-emerald-400 text-emerald-800';
+                              if (hasSelected) {
+                                if (isCorrect) btnStyle = 'bg-emerald-100 border-emerald-450 text-emerald-900 font-bold';
+                                else if (isSelected) btnStyle = 'bg-red-50 border-red-200 text-red-700 line-through';
+                                else btnStyle = 'bg-white border-slate-100 text-slate-400';
+                              }
+
+                              return (
+                                <button
+                                  key={oIdx}
+                                  disabled={hasSelected}
+                                  onClick={() => handleMiniQuizAnswer(idx, oIdx)}
+                                  className={`w-full text-left p-2 rounded border text-[10px] transition-all cursor-pointer ${btnStyle}`}
+                                >
+                                  {opt}
+                                </button>
+                              );
+                            })}
+                          </div>
+
+                          {msg.miniQuiz.userSelected !== undefined && (
+                            <div className="mt-2 text-[10px] text-slate-500 leading-normal border-t border-slate-200 pt-2">
+                              <span className="font-bold text-emerald-800 block mb-0.5">Penjelasan:</span>
+                              {msg.miniQuiz.explanation}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+
+              {isTyping && (
+                <div className="flex gap-2.5 self-start max-w-[85%]">
+                  <div className="w-7 h-7 rounded-md bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600">
+                    <Bot className="w-3.5 h-3.5" />
                   </div>
-                )}
+                  <div className="p-3 rounded-xl bg-white border border-slate-250 text-slate-400 text-xs rounded-tl-none shadow-sm flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 bg-slate-450 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                    <span className="w-1.5 h-1.5 bg-slate-450 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                    <span className="w-1.5 h-1.5 bg-slate-450 rounded-full animate-bounce" />
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Smart Suggested Actions */}
+            <div className="px-4 py-2 border-t border-slate-200 bg-white">
+              <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1 mb-1.5">
+                <HelpCircle className="w-3 h-3 text-emerald-700" /> Perintah Cepat:
+              </span>
+              <div className="flex flex-wrap gap-1">
+                {quickActions.map((action, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSend(action.query)}
+                    className="text-[9px] bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-350 text-slate-600 hover:text-emerald-800 px-2 py-0.5 rounded transition-all duration-200 cursor-pointer font-medium"
+                  >
+                    {action.label}
+                  </button>
+                ))}
               </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-
-        {isTyping && (
-          <div className="flex gap-3 self-start max-w-[85%]">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-              <Bot className="w-4 h-4" />
             </div>
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-400 text-xs rounded-tl-none flex items-center gap-1">
-              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
-              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
-              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" />
-            </div>
-          </div>
-        )}
-        <div ref={messagesEndRef} />
-      </div>
 
-      {/* Suggested Quick Actions */}
-      <div className="px-4 py-2 border-t border-slate-900 bg-slate-950/40">
-        <span className="text-[10px] text-slate-500 flex items-center gap-1 mb-1.5">
-          <HelpIcon className="w-3.5 h-3.5 text-indigo-400" /> Coba Perintah Pintar:
-        </span>
-        <div className="flex flex-wrap gap-1">
-          {quickActions.map((action, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleSend(action.query)}
-              className="text-[9px] bg-slate-900 hover:bg-indigo-950/40 border border-slate-800 hover:border-indigo-500/30 text-slate-450 hover:text-indigo-300 px-2 py-1 rounded-md text-left transition-all duration-200 cursor-pointer"
+            {/* Chat Input form */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSend(input);
+              }}
+              className="p-3 bg-white border-t border-slate-200 flex items-center gap-2"
             >
-              {action.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Chat input form */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSend(input);
-        }}
-        className="p-3 bg-slate-900/60 border-t border-slate-800 flex items-center gap-2"
-      >
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Tanyakan prediksi beras arima atau minta mini kuis..."
-          className="flex-1 px-4 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 text-xs focus:outline-none focus:border-indigo-500 transition-colors"
-        />
-        <button
-          type="submit"
-          disabled={!input.trim()}
-          className="p-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white disabled:opacity-50 transition-colors cursor-pointer"
-        >
-          <Send className="w-4 h-4" />
-        </button>
-      </form>
-    </div>
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Ketik pertanyaan prediksi/impor..."
+                className="flex-1 px-4 py-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-800 text-xs focus:outline-none focus:border-emerald-600 transition-colors"
+              />
+              <button
+                type="submit"
+                disabled={!input.trim()}
+                className="p-2 rounded-lg bg-emerald-800 hover:bg-emerald-700 text-white disabled:opacity-50 transition-colors cursor-pointer"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
