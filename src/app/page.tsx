@@ -4,12 +4,13 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { evaluatePolicyImpact } from '@/lib/econometrics-engine';
 import { useAuth } from '@/lib/AuthContext';
+import { NEWS_DATA } from '@/lib/data';
 import GradientButton from '@/components/ui/GradientButton';
 import SectionWrapper from '@/components/ui/SectionWrapper';
 import { 
   ArrowRight, ShieldCheck, Cpu, TrendingUp, Sparkles, 
   Sprout, CheckCircle, Award, ShieldAlert, BarChart3, 
-  Map, DollarSign, Activity, AlertTriangle
+  Map, DollarSign, Activity, AlertTriangle, Globe, Calendar, User, Database
 } from 'lucide-react';
 
 export default function Home() {
@@ -73,7 +74,7 @@ export default function Home() {
 
           {/* Left Column: Headline */}
           <div className="flex-1 flex flex-col gap-6 relative z-10">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-950 border border-emerald-500/30 text-[10px] font-black tracking-wider uppercase text-emerald-400 self-start shadow-sm">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-950 border border-emerald-500/30 text-[10px] font-black tracking-wider uppercase text-emerald-455 self-start shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-[#10b981]" />
               Sistem Penunjang Keputusan Terpadu BPS & Bank Indonesia
             </span>
@@ -156,13 +157,13 @@ export default function Home() {
 
             {user ? (
               <Link href="/dashboard/simulation" className="w-full">
-                <GradientButton variant="indigo" className="w-full text-xs font-bold py-3 shadow-md shadow-emerald-900/10">
+                <GradientButton variant="indigo" className="w-full text-xs font-bold py-3 shadow-md shadow-emerald-950/10">
                   Detail Simulasi Monte Carlo
                 </GradientButton>
               </Link>
             ) : (
               <button onClick={handleOpenLogin} className="w-full">
-                <GradientButton variant="indigo" className="w-full text-xs font-bold py-3 shadow-md shadow-emerald-900/10">
+                <GradientButton variant="indigo" className="w-full text-xs font-bold py-3 shadow-md shadow-emerald-950/10">
                   Masuk Untuk Akses Detail
                 </GradientButton>
               </button>
@@ -185,28 +186,54 @@ export default function Home() {
         </div>
       </SectionWrapper>
 
-      {/* 3. ABOUT US / POLICY DESCRIPTION */}
-      <SectionWrapper id="tentang" className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start relative z-10">
-        <div className="md:col-span-1">
-          <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block mb-2">SATRISNA Platform</span>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#022c1b] leading-tight">
-            Keunggulan Kuantitatif<br />
-            Ekonometrika Pangan
-          </h2>
-        </div>
-        <div className="md:col-span-2 text-xs sm:text-sm text-slate-500 leading-relaxed font-semibold flex flex-col gap-4">
-          <p>
-            Di tengah ketidakpastian geopolitik global yang memicu lonjakan biaya logistik energi internasional serta anomali iklim el-nino, stabilitas harga pangan pokok menjadi garis pertahanan utama dalam menjaga daya beli masyarakat. SATRISNA hadir sebagai instrumen digital pendukung keputusan kebijakan pangan nasional yang kredibel dan objektif.
+      {/* 3. REDESIGNED ABOUT US: Premium Layout Grid (Keunggulan Kuantitatif Ekonometrika) */}
+      <SectionWrapper id="tentang" className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch relative z-10">
+        
+        {/* Left Side: Editorial forest-green statement block */}
+        <div className="lg:col-span-1 bg-gradient-to-tr from-[#021f13] to-[#0a5c36] text-white p-8 rounded-3xl flex flex-col justify-between border border-emerald-950 shadow-sm relative overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(16,185,129,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+          
+          <div className="flex flex-col gap-4 relative z-10">
+            <span className="text-[9px] font-black uppercase tracking-wider text-emerald-400">SATRISNA Filosofi</span>
+            <h2 className="text-xl sm:text-2xl font-black text-white leading-tight">
+              Mengapa Kuantitatif<br />
+              Ekonometrika Pangan?
+            </h2>
+          </div>
+          <p className="text-xs text-slate-300 leading-relaxed font-semibold mt-6 relative z-10">
+            Di tengah ketidakpastian geopolitik global yang memicu lonjakan biaya logistik energi internasional serta anomali iklim el-nino, stabilitas harga pangan pokok menjadi garis pertahanan utama dalam menjaga daya beli masyarakat.
           </p>
-          <p>
-            Dengan memetakan jalur transmisi fiskal belanja negara secara real-time, kami menyelaraskan target stabilitas inflasi pangan volatile food di rentang aman 2.0% - 4.2% demi mendukung kemandirian pangan nasional menuju Indonesia Emas 2045.
-          </p>
         </div>
+
+        {/* Right Side: Dual-card grid with data-credibility and APBN synergy details */}
+        <div className="lg:col-span-2 flex flex-col gap-6 justify-between">
+          
+          <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex flex-col gap-2">
+            <div className="flex items-center gap-2 text-[#022c1b] mb-1">
+              <Database className="w-5 h-5 text-emerald-700" />
+              <h4 className="text-sm font-black">Kredibilitas Keputusan Berbasis Data Terintegrasi</h4>
+            </div>
+            <p className="text-xs text-slate-500 leading-relaxed font-semibold">
+              SATRISNA hadir sebagai instrumen digital pendukung keputusan kebijakan pangan nasional yang kredibel dan objektif. Dengan memetakan jalur transmisi fiskal belanja negara secara real-time, kami menyelaraskan target stabilitas inflasi pangan volatile food di rentang aman 2.0% - 4.2% demi mendukung kemandirian pangan nasional.
+            </p>
+          </div>
+
+          <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex flex-col gap-2">
+            <div className="flex items-center gap-2 text-[#022c1b] mb-1">
+              <Sprout className="w-5 h-5 text-emerald-700" />
+              <h4 className="text-sm font-black">Optimalisasi Anggaran Subsidi & Penyangga Pasar</h4>
+            </div>
+            <p className="text-xs text-slate-500 leading-relaxed font-semibold">
+              Menghubungkan elastisitas alokasi subsidi input pertanian dengan kecukupan pasok pergudangan eceran secara ilmiah. Penyelarasan ini meminimalisir deviasi anggaran belanja fiskal dan memaksimalkan efektivitas penyaluran beras stabilisasi Bulog.
+            </p>
+          </div>
+
+        </div>
+
       </SectionWrapper>
 
-      {/* 4. INTERACTIVE PRICE IMPACT SIMULATOR (Highly Visual, useful for laypeople) */}
+      {/* 4. INTERACTIVE PRICE IMPACT SIMULATOR */}
       <SectionWrapper className="bg-slate-50 p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-6 relative z-10">
-        {/* Subtle grid pattern inside */}
         <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none opacity-20" />
         
         <div className="border-b border-slate-200 pb-4 relative z-10">
@@ -225,7 +252,7 @@ export default function Home() {
             <div className="flex flex-col gap-2">
               <div className="flex justify-between text-xs font-bold">
                 <span className="text-slate-600">Kenaikan Harga Beras Premium:</span>
-                <span className="text-red-650 font-black">+{priceRise}%</span>
+                <span className="text-red-655 font-black">+{priceRise}%</span>
               </div>
               <input 
                 type="range" min="0" max="30" step="1" value={priceRise}
@@ -249,7 +276,7 @@ export default function Home() {
                 <span className="text-xl font-black text-slate-800">{social.power.toFixed(0)}%</span>
                 <span className={`text-[9px] px-2 py-0.5 rounded-full self-start ${
                   social.status === 'Kritis' ? 'bg-red-50 text-red-700 border border-red-200' :
-                  social.status === 'Waspada' ? 'bg-amber-50 text-amber-850 border border-amber-200' :
+                  social.status === 'Waspada' ? 'bg-amber-50 text-amber-800 border border-amber-200' :
                   'bg-emerald-50 text-emerald-800 border border-emerald-200'
                 }`}>
                   Status: {social.status}
@@ -293,7 +320,6 @@ export default function Home() {
         
         {/* Card 1: ARIMA */}
         <div className="bg-[#021f13] border border-emerald-900 rounded-3xl p-6 sm:p-8 flex flex-col justify-between gap-6 shadow-sm hover:border-[#10b981] transition-all duration-300 group text-white relative overflow-hidden">
-          {/* Geometric lines within card */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(16,185,129,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
           
           <div className="flex flex-col gap-4 relative z-10">
@@ -335,7 +361,6 @@ export default function Home() {
 
         {/* Card 2: Monte Carlo */}
         <div className="bg-[#021f13] border border-emerald-900 rounded-3xl p-6 sm:p-8 flex flex-col justify-between gap-6 shadow-sm hover:border-[#10b981] transition-all duration-300 group text-white relative overflow-hidden">
-          {/* Geometric lines within card */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(16,185,129,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
           
           <div className="flex flex-col gap-4 relative z-10">
@@ -345,7 +370,7 @@ export default function Home() {
             <div>
               <h3 className="text-lg font-black text-white mb-2">Simulasi Risiko Stokastik Monte Carlo</h3>
               <p className="text-xs text-slate-300 leading-relaxed font-semibold">
-                Memproyasikan 50 jalur ketidakpastian harga pangan eceran secara dinamis untuk mengukur probabilitas keberhasilan stabilisasi pasar serta dampaknya terhadap defisit neraca anggaran fiskal APBN.
+                Memproyeksikan 50 jalur ketidakpastian harga pangan eceran secara dinamis untuk mengukur probabilitas keberhasilan stabilisasi pasar serta dampaknya terhadap defisit neraca anggaran fiskal APBN.
               </p>
             </div>
           </div>
@@ -388,7 +413,7 @@ export default function Home() {
           <h2 className="text-2xl sm:text-3xl font-black text-[#022c1b] leading-tight">
             Pemantauan Geografis Kerawanan Pasokan Daerah
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-medium">
+          <p className="text-xs sm:text-sm text-slate-505 leading-relaxed font-medium">
             SATRISNA memetakan alarm status kerawanan pangan (Aman, Waspada, Darurat) secara dinamis di seluruh pulau besar Indonesia. Memudahkan regulator memantau titik defisit pasokan secara cepat.
           </p>
           {user ? (
@@ -426,7 +451,56 @@ export default function Home() {
         </div>
       </SectionWrapper>
 
-      {/* 7. FULL-WIDTH TEXT & FEATURES */}
+      {/* NEW: 7. KILAS BERITA MAKRO & PANGAN (Editorial DPR Feed style - Dynamic news linking) */}
+      <SectionWrapper className="flex flex-col gap-8 relative z-10 border-t border-slate-100 pt-16">
+        <div className="flex justify-between items-end">
+          <div>
+            <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block mb-1">Informasi Kebijakan</span>
+            <h2 className="text-2xl font-black text-[#022c1b]">Kilas Berita Makro & Analisis Pangan</h2>
+            <p className="text-xs text-slate-500 mt-1 font-semibold">
+              Kompilasi artikel publikasi analitis terkait gejolak pangan global, stabilitas harga, dan fiskal.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {NEWS_DATA.slice(0, 2).map((news, idx) => (
+            <div key={idx} className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col justify-between gap-5 shadow-sm hover:border-[#10b981] transition-all duration-300 group">
+              <div className="flex flex-col gap-3">
+                <span className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-emerald-850 self-start">
+                  {news.tag}
+                </span>
+                
+                {/* Dynamic routing gate: requires login check */}
+                <h3 className="text-base font-black text-slate-800 leading-snug group-hover:text-emerald-700 transition-colors">
+                  {user ? (
+                    <Link href={`/dashboard/news/${news.slug}`}>{news.title}</Link>
+                  ) : (
+                    <button onClick={handleOpenLogin} className="text-left font-black">
+                      {news.title}
+                    </button>
+                  )}
+                </h3>
+                
+                <p className="text-xs text-slate-500 leading-relaxed font-semibold line-clamp-3">
+                  {news.summary}
+                </p>
+              </div>
+
+              <div className="flex justify-between items-center text-[10px] text-slate-400 border-t border-slate-100 pt-4 font-bold">
+                <span className="flex items-center gap-1">
+                  <User className="w-3.5 h-3.5 text-emerald-700" /> {news.author}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-slate-400" /> {news.date}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SectionWrapper>
+
+      {/* 8. FULL-WIDTH TEXT & FEATURES */}
       <SectionWrapper className="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-6 items-center text-center relative z-10">
         <div className="max-w-2xl flex flex-col gap-2">
           <h2 className="text-xl sm:text-2xl font-black text-slate-800 leading-snug">
