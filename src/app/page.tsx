@@ -54,7 +54,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col gap-24 pb-24 bg-white relative">
+    <div className="flex flex-col gap-24 pb-24 bg-white relative font-sans">
       
       {/* Premium Engineering Dot Grid Overlay for the entire body */}
       <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] pointer-events-none opacity-50 z-0" />
@@ -211,7 +211,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="bg-white border border-slate-255 p-6 rounded-2xl shadow-sm flex flex-col gap-2">
+          <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex flex-col gap-2">
             <div className="flex items-center gap-2 text-[#022c1b] mb-1">
               <span className="text-[10px] font-mono tracking-widest font-black uppercase text-emerald-800">[ PILAR 02 ]</span>
             </div>
@@ -248,13 +248,13 @@ export default function Home() {
 
             <div className="flex flex-col gap-4">
               <div className="flex justify-between text-xs font-bold items-end">
-                <span className="text-slate-600 font-medium">Kenaikan Beras Premium:</span>
+                <span className="text-slate-650 font-medium">Kenaikan Beras Premium:</span>
                 <span className="text-2xl font-black text-red-650">+{priceRise}%</span>
               </div>
               <input 
                 type="range" min="0" max="30" step="1" value={priceRise}
                 onChange={(e) => setPriceRise(parseInt(e.target.value))}
-                className="w-full h-2 bg-slate-155 rounded-lg appearance-none cursor-pointer accent-[#ef4444]"
+                className="w-full h-2 bg-slate-150 rounded-lg appearance-none cursor-pointer accent-[#ef4444]"
               />
               <div className="flex justify-between text-[8px] text-slate-400 font-mono font-bold">
                 <span>0% STABIL</span>
@@ -322,7 +322,7 @@ export default function Home() {
             </div>
 
             {/* Large Recommendation Box */}
-            <div className="bg-white p-5 rounded-2xl border-l-4 border-l-[#022c1b] border-y border-r border-slate-205 shadow-sm flex flex-col gap-1.5">
+            <div className="bg-white p-5 rounded-2xl border-l-4 border-l-[#022c1b] border-y border-r border-slate-200 shadow-sm flex flex-col gap-1.5">
               <span className="text-[9px] font-mono tracking-widest font-black uppercase text-[#022c1b]">Rekomendasi Kebijakan (Regulator)</span>
               <p className="text-xs text-slate-700 leading-relaxed font-semibold">
                 {social.recommendation}
@@ -531,39 +531,53 @@ export default function Home() {
         </div>
       </SectionWrapper>
 
-      {/* 8. FULL-WIDTH TEXT & FEATURES */}
-      <SectionWrapper className="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-6 items-center text-center relative z-10">
-        <div className="max-w-2xl flex flex-col gap-2">
-          <h2 className="text-xl sm:text-2xl font-black text-slate-800 leading-snug">
+      {/* 8. REDESIGNED MATRIKS STANDAR TATA KELOLA (Luxury Cards Grid - 4px forest-green borders, no icons) */}
+      <SectionWrapper className="flex flex-col gap-8 relative z-10 border-t border-slate-150 pt-16">
+        <div>
+          <span className="text-[10px] font-mono font-black text-emerald-800 uppercase tracking-widest block mb-1">[ STANDAR TATA KELOLA ]</span>
+          <h2 className="text-2xl font-black text-[#022c1b] leading-tight">
             Akurasi Ilmiah. Pemodelan Profesional yang Dapat Diandalkan.
           </h2>
-          <p className="text-xs text-slate-455 font-bold uppercase tracking-wider">
+          <p className="text-xs text-slate-550 mt-1 font-semibold">
             Standar Keamanan Pangan & Tata Kelola Keuangan Negara Berkelanjutan
           </p>
         </div>
 
-        <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-6 text-left border-t border-slate-200 pt-6 mt-2 text-xs font-bold text-slate-655 font-mono">
-          <div className="flex gap-2.5 items-start">
-            <span className="text-emerald-700 font-black shrink-0">[1]</span>
-            <div>
-              <span className="text-slate-850 font-black block mb-0.5">Stabilitas CBP</span>
-              <p className="text-[10px] text-slate-400 font-medium leading-relaxed">Menjaga stok pemerintah minimal 1 juta ton.</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-xs text-slate-655 mt-4">
+          
+          {/* Card 1 */}
+          <div className="bg-white border-t-4 border-t-[#022c1b] border-x border-b border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between min-h-[160px]">
+            <div className="flex flex-col gap-2">
+              <span className="text-[8.5px] font-mono uppercase tracking-wider text-emerald-700 font-extrabold">[ STANDAR 01 ]</span>
+              <h3 className="text-sm font-black text-slate-800">Stabilitas CBP</h3>
             </div>
+            <p className="text-[11px] text-slate-500 font-medium leading-relaxed mt-3">
+              Menjaga kecukupan cadangan beras pemerintah (CBP) minimal 1 juta ton sebagai instrumen utama stabilisasi pasokan pasar nasional.
+            </p>
           </div>
-          <div className="flex gap-2.5 items-start">
-            <span className="text-emerald-700 font-black shrink-0">[2]</span>
-            <div>
-              <span className="text-slate-850 font-black block mb-0.5">Mitigasi Volatilitas</span>
-              <p className="text-[10px] text-slate-400 font-medium leading-relaxed">Meredam heteroskedastisitas musiman.</p>
+
+          {/* Card 2 */}
+          <div className="bg-white border-t-4 border-t-[#022c1b] border-x border-b border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between min-h-[160px]">
+            <div className="flex flex-col gap-2">
+              <span className="text-[8.5px] font-mono uppercase tracking-wider text-emerald-700 font-extrabold">[ STANDAR 02 ]</span>
+              <h3 className="text-sm font-black text-slate-800">Mitigasi Volatilitas</h3>
             </div>
+            <p className="text-[11px] text-slate-500 font-medium leading-relaxed mt-3">
+              Meredam dampak heteroskedastisitas harga musiman dan volatilitas pasokan global dengan algoritma time-series GARCH terkalibrasi.
+            </p>
           </div>
-          <div className="flex gap-2.5 items-start">
-            <span className="text-emerald-700 font-black shrink-0">[3]</span>
-            <div>
-              <span className="text-slate-850 font-black block mb-0.5">Literasi Poin</span>
-              <p className="text-[10px] text-slate-400 font-medium leading-relaxed">Edu-kuis berhadiah sembako gratis dari retail.</p>
+
+          {/* Card 3 */}
+          <div className="bg-white border-t-4 border-t-[#022c1b] border-x border-b border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between min-h-[160px]">
+            <div className="flex flex-col gap-2">
+              <span className="text-[8.5px] font-mono uppercase tracking-wider text-emerald-700 font-extrabold">[ STANDAR 03 ]</span>
+              <h3 className="text-sm font-black text-slate-800">Literasi Poin</h3>
             </div>
+            <p className="text-[11px] text-slate-500 font-medium leading-relaxed mt-3">
+              Edu-kuis interaktif bernilai poin sembako yang dapat ditukarkan langsung di jaringan mitra retail CSR guna meningkatkan literasi ekonomi.
+            </p>
           </div>
+
         </div>
       </SectionWrapper>
 
