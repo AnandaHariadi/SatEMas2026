@@ -95,10 +95,10 @@ export default function IndonesiaOSMMap({ onRegionSelect, selectedRegionId }: In
 
       <div className="relative">
         <MapContainer 
-          center={[-2.400, 118.000]} 
-          zoom={4} 
+          center={[-2.200, 118.000]} 
+          zoom={5} 
           scrollWheelZoom={false}
-          className="w-full h-[400px]"
+          className="w-full h-[500px]"
           zoomControl={true}
         >
           {/* Mapbox Positron light style tiles */}

@@ -462,7 +462,7 @@ export default function Home() {
         </div>
 
         {/* Real Interactive Leaflet OpenStreetMap Container - 100% Spanned and highly responsive */}
-        <div className="w-full min-h-[400px]">
+        <div className="w-full min-h-[500px]">
           <IndonesiaOSMMap 
             onRegionSelect={(reg) => setSelectedRegion(reg)} 
             selectedRegionId={selectedRegion.id} 
