@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Award, ShieldAlert, BookOpen, Heart } from 'lucide-react';
+import { Award, ShieldAlert, BookOpen } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 
 export default function Footer() {
@@ -81,9 +81,7 @@ export default function Footer() {
         <div className="mt-12 pt-6 border-t border-emerald-950 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
           <span>&copy; {new Date().getFullYear()} SATRISNA Platform. All rights reserved.</span>
           <div className="flex items-center gap-1 font-bold">
-            <span>Dibuat untuk Stabilitas Ekonomi Indonesia Emas 2045 dengan</span>
-            <Heart className="w-3 h-3 text-red-500 fill-red-500" />
-            <span>oleh Tim Gemastik</span>
+            <span>Dibuat untuk Stabilitas Ekonomi Indonesia Emas 2045 oleh Tim Gemastik</span>
           </div>
         </div>
       </div>

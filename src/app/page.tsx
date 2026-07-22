@@ -100,7 +100,7 @@ export default function Home() {
               {user ? (
                 <Link href="/dashboard">
                   <GradientButton variant="emerald" className="px-6 py-3 font-bold text-xs sm:text-sm shadow-xl shadow-emerald-500/20">
-                    Masuk Dashboard Utama &rarr;
+                    Masuk Dashboard Utama
                   </GradientButton>
                 </Link>
               ) : (
@@ -109,11 +109,11 @@ export default function Home() {
                   onClick={handleOpenLogin}
                   className="px-6 py-3 font-bold text-xs sm:text-sm shadow-xl shadow-emerald-500/20"
                 >
-                  Masuk Portal Penstabil &rarr;
+                  Masuk Portal Penstabil
                 </GradientButton>
               )}
               <a href="#fitur" className="text-xs text-slate-300 hover:text-emerald-455 font-bold transition-colors">
-                Eksplorasi Fitur Pangan &darr;
+                Eksplorasi Fitur Pangan
               </a>
             </div>
           </div>
@@ -365,7 +365,7 @@ export default function Home() {
           </div>
 
           {/* SVG Mockup of TimeSeries ARIMA Line graph */}
-          <div className="w-full h-24 bg-[#01140c] rounded-xl border border-emerald-950 relative overflow-hidden flex items-center justify-center p-2 z-10">
+          <div className="w-full h-24 bg-[#01140c] rounded-xl border border-emerald-955 relative overflow-hidden flex items-center justify-center p-2 z-10">
             <svg className="w-full h-full text-emerald-600" viewBox="0 0 200 60" fill="none">
               <path d="M10 40 Q 30 20, 50 35 T 90 20 T 130 38 T 170 15 T 190 25" stroke="#10b981" strokeWidth="2.5" fill="none" />
               <path d="M130 38 T 170 15 T 190 25 L 190 45 L 130 45 Z" fill="rgba(16, 185, 129, 0.08)" stroke="rgba(16,185,129,0.2)" strokeWidth="1" strokeDasharray="2,2" />
@@ -377,13 +377,13 @@ export default function Home() {
           {user ? (
             <Link href="/dashboard/prediction" className="self-start relative z-10">
               <GradientButton variant="emerald" className="text-xs px-4 font-bold">
-                Eksplorasi Hasil Prediksi &rarr;
+                Eksplorasi Hasil Prediksi
               </GradientButton>
             </Link>
           ) : (
             <button onClick={handleOpenLogin} className="self-start relative z-10">
               <GradientButton variant="emerald" className="text-xs px-4 font-bold">
-                Eksplorasi Hasil Prediksi (Masuk) &rarr;
+                Eksplorasi Hasil Prediksi (Masuk)
               </GradientButton>
             </button>
           )}
@@ -418,13 +418,13 @@ export default function Home() {
           {user ? (
             <Link href="/dashboard/simulation" className="self-start relative z-10">
               <GradientButton variant="emerald" className="text-xs px-4 font-bold">
-                Eksplorasi Hasil Simulasi &rarr;
+                Eksplorasi Hasil Simulasi
               </GradientButton>
             </Link>
           ) : (
             <button onClick={handleOpenLogin} className="self-start relative z-10">
               <GradientButton variant="emerald" className="text-xs px-4 font-bold">
-                Eksplorasi Hasil Simulasi (Masuk) &rarr;
+                Eksplorasi Hasil Simulasi (Masuk)
               </GradientButton>
             </button>
           )}
@@ -449,13 +449,13 @@ export default function Home() {
           {user ? (
             <Link href="/dashboard">
               <GradientButton variant="indigo" className="text-xs px-6 font-bold shrink-0">
-                Buka Peta Analisis Utama &rarr;
+                Buka Peta Analisis Utama
               </GradientButton>
             </Link>
           ) : (
             <button onClick={handleOpenLogin} className="shrink-0">
               <GradientButton variant="indigo" className="text-xs font-bold px-6">
-                Masuk Untuk Akses Peta Utama &rarr;
+                Masuk Untuk Akses Peta Utama
               </GradientButton>
             </button>
           )}
@@ -573,7 +573,7 @@ export default function Home() {
                 <span className="w-8 h-8 rounded-full bg-emerald-900/80 border border-emerald-800 flex items-center justify-center text-[10px] font-mono font-bold text-emerald-450">
                   01
                 </span>
-                <h3 className="text-sm font-black text-white">Stabilitas Cadangan Pemerintah</h3>
+                <h3 className="text-sm font-black text-white">Stabilitas Cadangan Pangan</h3>
               </div>
               <p className="text-[11px] text-slate-300 font-medium leading-relaxed mt-4">
                 Menjaga kecukupan cadangan beras pemerintah (CBP) minimal 1 juta ton sebagai instrumen utama stabilisasi pasokan pasar nasional.
@@ -599,7 +599,7 @@ export default function Home() {
                 <span className="w-8 h-8 rounded-full bg-emerald-900/80 border border-emerald-800 flex items-center justify-center text-[10px] font-mono font-bold text-emerald-400">
                   03
                 </span>
-                <h3 className="text-sm font-black text-white">Literasi Keuangan Masyarakat</h3>
+                <h3 className="text-sm font-black text-white">Literasi Keuangan Pangan</h3>
               </div>
               <p className="text-[11px] text-slate-300 font-medium leading-relaxed mt-4">
                 Edu-kuis interaktif bernilai poin sembako yang dapat ditukarkan langsung di jaringan mitra retail CSR guna meningkatkan literasi pangan pokok.
