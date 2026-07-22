@@ -246,7 +246,7 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* 3. POPUP LOGIN OVERLAY DIALOG */}
+      {/* 3. POPUP LOGIN OVERLAY DIALOG (Split-Screen Layout inspired by SITABA PU) */}
       <AnimatePresence>
         {isLoginOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
@@ -254,103 +254,203 @@ export default function Navbar() {
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="bg-white border border-slate-200 w-full max-w-[420px] rounded-3xl shadow-2xl p-6 sm:p-8 relative overflow-hidden flex flex-col gap-6"
+              className="bg-white border border-slate-200 w-full max-w-[850px] h-auto md:h-[540px] rounded-3xl shadow-2xl p-0 flex flex-col md:flex-row overflow-hidden relative"
             >
-              {/* Header */}
-              <div className="flex justify-between items-start">
-                <div>
-                  <span className="text-[8px] uppercase tracking-widest font-black text-slate-400 block">Sistem Otentikasi</span>
-                  <h3 className="text-base font-black text-slate-800">Masuk Portal SATRISNA</h3>
+              
+              {/* Left Column: Dark Forest-Green Branding & Isometric SVG Illustration */}
+              <div className="w-full md:w-[42%] bg-gradient-to-tr from-[#021f13] to-[#05321f] text-white p-8 flex flex-col justify-between relative overflow-hidden hidden md:flex border-r border-emerald-950/20">
+                {/* Coordinate Grid lines decoration */}
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:28px_28px] pointer-events-none" />
+                
+                <div className="flex flex-col gap-1 relative z-10">
+                  <span className="text-[8px] font-mono tracking-widest text-emerald-400 uppercase">[ PORTAL OTENTIKASI ]</span>
+                  <h3 className="text-base font-black tracking-tight text-white uppercase">SATRISNA DSS</h3>
+                  <p className="text-[10px] text-slate-300 leading-normal font-semibold">
+                    Sistem Pendukung Keputusan Pengamanan Anggaran & Inflasi Pangan Volatile
+                  </p>
                 </div>
-                <button 
-                  onClick={() => setIsLoginOpen(false)}
-                  className="p-1 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-655 border border-slate-200 cursor-pointer"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+
+                {/* Isometric SVG Analyst Workspace Illustration */}
+                <div className="w-full flex justify-center items-center my-6 relative z-10">
+                  <svg className="w-full max-w-[210px] h-[170px]" viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {/* Grid Coordinates base */}
+                    <path d="M10 120 L90 80 L190 120 L90 160 Z" fill="#01100a" stroke="#062e1c" strokeWidth="1.5" />
+                    
+                    {/* Server Rack / Screen Stand */}
+                    <rect x="85" y="100" width="10" height="35" rx="2" fill="#05321f" stroke="#10b981" strokeWidth="1" />
+                    
+                    {/* Isometric Monitor Left (Price Graphs) */}
+                    <path d="M45 65 L85 45 L85 95 L45 115 Z" fill="#021f13" stroke="#10b981" strokeWidth="1.5" />
+                    <path d="M50 72 L80 57" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="1.5" />
+                    <path d="M50 82 L80 67" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="1.5" />
+                    <path d="M50 95 Q 65 85, 80 80" stroke="#10b981" strokeWidth="2" fill="none" />
+
+                    {/* Isometric Monitor Right (Geospatial Map) */}
+                    <path d="M95 45 L135 65 L135 115 L95 95 Z" fill="#021f13" stroke="#10b981" strokeWidth="1.5" />
+                    <circle cx="115" cy="75" r="3.5" fill="#ef4444" className="animate-pulse" />
+                    <circle cx="108" cy="68" r="2" fill="#f59e0b" />
+                    <circle cx="125" cy="85" r="2.5" fill="#10b981" />
+                    {/* Map contours mockup */}
+                    <path d="M100 85 L125 72 L128 98 L105 102 Z" fill="rgba(16, 185, 129, 0.08)" stroke="rgba(16,185,129,0.2)" strokeWidth="0.5" />
+
+                    {/* Laptop on desk */}
+                    <path d="M75 125 L95 115 L115 125 L95 135 Z" fill="#022013" stroke="#10b981" strokeWidth="1.2" />
+                    <path d="M95 115 L95 102 L115 112 L115 125 Z" fill="#01140c" stroke="#10b981" strokeWidth="1" />
+                    
+                    {/* Holographic Agricultural Node floating */}
+                    <path d="M90 10 Q 82 25, 90 35 Q 98 25, 90 10 Z" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" strokeWidth="1" />
+                    <line x1="90" y1="10" x2="90" y2="35" stroke="#10b981" strokeWidth="0.5" />
+                  </svg>
+                </div>
+
+                <div className="relative z-10 flex flex-col gap-1 text-[8px] text-emerald-450/70 font-mono tracking-wider">
+                  <span>OTENTIKASI TERENKRIPSI SSL 256-BIT</span>
+                  <span>SATRISNA COMPLIANT BPS & BI</span>
+                </div>
               </div>
 
-              {/* Form Content */}
-              <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4 text-xs font-semibold">
+              {/* Right Column: Modern Login Form */}
+              <div className="w-full md:w-[58%] flex flex-col justify-between p-6 sm:p-8 bg-white relative">
                 
-                {/* Role Switcher */}
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-slate-500">Pilih Hak Akses Pengguna:</label>
-                  <div className="grid grid-cols-3 gap-1.5 bg-slate-50 p-1 rounded-xl border border-slate-200">
-                    {(['Regulator BPS/BI', 'Akademisi/Mahasiswa', 'UMKM / Masyarakat'] as const).map((role) => (
-                      <button
-                        key={role}
-                        type="button"
-                        onClick={() => handleRoleChange(role)}
-                        className={`py-2 text-[8px] font-black uppercase text-center rounded-lg transition-all cursor-pointer ${
-                          selectedRole === role 
-                            ? 'bg-[#022c1b] text-white shadow-sm' 
-                            : 'text-slate-455 hover:text-slate-700'
-                        }`}
-                      >
-                        {role.split(' ')[0]}
-                      </button>
-                    ))}
+                {/* Close Button */}
+                <button 
+                  onClick={() => setIsLoginOpen(false)}
+                  className="absolute right-4 top-4 p-1 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 border border-slate-200 cursor-pointer animate-none transition-all"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+
+                {/* Form Header */}
+                <div className="flex flex-col gap-1.5 pr-6 mt-1">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-[#022c1b] to-[#10b981] flex items-center justify-center text-white font-black text-xs">
+                      S
+                    </div>
+                    <span className="text-[10px] font-black tracking-wider text-[#022c1b] uppercase">SATRISNA Portal</span>
                   </div>
+                  <h3 className="text-base font-black text-slate-800 mt-2">Welcome back! Please enter your details.</h3>
+                  <p className="text-[10px] text-slate-500 font-semibold leading-relaxed">
+                    Sistem otentikasi BPS & BI. Masukkan NIP kepegawaian Anda untuk mengakses ruang kerja keputusan nasional.
+                  </p>
                 </div>
 
-                {/* Input Name */}
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-slate-500">Nama Lengkap Pengguna:</label>
-                  <input
-                    type="text"
-                    required
-                    value={inputName}
-                    onChange={(e) => setInputName(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs focus:outline-none focus:border-[#022c1b] transition-colors"
-                  />
-                </div>
+                {/* Form */}
+                <form onSubmit={handleLoginSubmit} className="flex flex-col gap-3.5 text-xs font-semibold mt-4">
+                  
+                  {/* Role tab selector */}
+                  <div className="flex flex-col gap-1">
+                    <label className="text-slate-500 text-[10px] font-bold">Pilih Hak Akses:</label>
+                    <div className="grid grid-cols-3 gap-1 bg-slate-50 p-1 rounded-xl border border-slate-200">
+                      {(['Regulator BPS/BI', 'Akademisi/Mahasiswa', 'UMKM / Masyarakat'] as const).map((role) => (
+                        <button
+                          key={role}
+                          type="button"
+                          onClick={() => handleRoleChange(role)}
+                          className={`py-1.5 text-[8px] font-black uppercase text-center rounded-lg transition-all cursor-pointer ${
+                            selectedRole === role 
+                              ? 'bg-[#022c1b] text-white shadow-sm' 
+                              : 'text-slate-450 hover:text-slate-700'
+                          }`}
+                        >
+                          {role.split(' ')[0]}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
-                {/* Input ID */}
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-slate-500">
-                    {selectedRole === 'Regulator BPS/BI' ? 'NIP Pejabat BPS/BI:' : selectedRole === 'Akademisi/Mahasiswa' ? 'NIM Mahasiswa:' : 'NIB Pelaku Usaha:'}
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={inputId}
-                    onChange={(e) => setInputId(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs font-mono focus:outline-none focus:border-[#022c1b] transition-colors"
-                  />
-                </div>
-
-                {/* Simulated Password */}
-                <div className="flex flex-col gap-1.5 relative">
-                  <label className="text-slate-500">Sandi Akses Kriptografi:</label>
-                  <div className="relative">
+                  {/* Input Name */}
+                  <div className="flex flex-col gap-1">
+                    <label className="text-slate-500 text-[10px]">Nama Lengkap Pengguna:</label>
                     <input
-                      type={showPassword ? "text" : "password"}
+                      type="text"
                       required
-                      defaultValue="••••••••••••••"
-                      className="w-full pl-4 pr-10 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs focus:outline-none focus:border-[#022c1b] transition-colors"
+                      value={inputName}
+                      onChange={(e) => setInputName(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-[11px] font-medium focus:outline-none focus:border-[#022c1b] transition-colors"
                     />
-                    <button
+                  </div>
+
+                  {/* Input ID */}
+                  <div className="flex flex-col gap-1">
+                    <label className="text-slate-500 text-[10px]">
+                      {selectedRole === 'Regulator BPS/BI' ? 'NIP Kepegawaian:' : selectedRole === 'Akademisi/Mahasiswa' ? 'NIM Akademis:' : 'NIB Registrasi Usaha:'}
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={inputId}
+                      onChange={(e) => setInputId(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-[11px] font-mono focus:outline-none focus:border-[#022c1b] transition-colors"
+                    />
+                  </div>
+
+                  {/* Password field with visibility toggle */}
+                  <div className="flex flex-col gap-1 relative">
+                    <label className="text-slate-505 text-[10px]">Kunci Sandi Kriptografi:</label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        required
+                        defaultValue="••••••••••••••"
+                        className="w-full pl-3 pr-10 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-[11px] focus:outline-none focus:border-[#022c1b] transition-colors"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-655 cursor-pointer"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Form Submission Buttons */}
+                  <div className="mt-3 flex flex-col gap-2">
+                    <GradientButton type="submit" variant="emerald" className="w-full py-2.5 font-bold text-xs shadow-md shadow-emerald-500/10">
+                      Login Portal Utama
+                    </GradientButton>
+                    
+                    {/* BPS/BI Federated Login Account Button (Reference 2 style) */}
+                    <button 
                       type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 cursor-pointer"
+                      onClick={() => {
+                        login("Dr. Ananda Hariadi, M.Econ", "Regulator BPS/BI", "199408252020121002");
+                        setIsLoginOpen(false);
+                      }}
+                      className="w-full py-2 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/10 flex items-center justify-center gap-2 text-[10px] font-bold text-slate-600 cursor-pointer transition-all duration-200"
                     >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                      Masuk dengan Akun Pegawai BPS / BI
                     </button>
                   </div>
+
+                </form>
+
+                {/* Footer Links: Reset password & Clear cache */}
+                <div className="flex justify-between items-center text-[9px] text-slate-405 font-bold pt-4 border-t border-slate-100 mt-4">
+                  <button 
+                    type="button"
+                    onClick={() => alert("Silakan hubungi Administrator IT BPS / BI untuk me-reset sandi kepegawaian Anda.")}
+                    className="hover:text-emerald-700 transition-colors uppercase font-mono cursor-pointer"
+                  >
+                    Reset Password
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => {
+                      setInputName('Dr. Ananda Hariadi, M.Econ');
+                      setInputId('199408252020121002');
+                      setSelectedRole('Regulator BPS/BI');
+                      alert("Cache sesi didekripsi dan dibersihkan.");
+                    }}
+                    className="hover:text-emerald-700 transition-colors uppercase font-mono cursor-pointer"
+                  >
+                    Bersihkan Cache
+                  </button>
                 </div>
 
-                <div className="mt-2 flex flex-col gap-2">
-                  <GradientButton type="submit" variant="indigo" className="w-full font-bold">
-                    Konfirmasi Masuk Portal &rarr;
-                  </GradientButton>
-                  
-                  <span className="text-[9px] text-slate-400 text-center leading-normal">
-                    *Gunakan kredibilitas simulasi otomatis untuk pengujian portal.
-                  </span>
-                </div>
+              </div>
 
-              </form>
             </motion.div>
           </div>
         )}

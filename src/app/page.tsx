@@ -447,26 +447,36 @@ export default function Home() {
             </p>
           </div>
           {user ? (
-            <Link href="/dashboard">
+            <Link href="/dashboard/map">
               <GradientButton variant="indigo" className="text-xs px-6 font-bold shrink-0">
                 Buka Peta Analisis Utama
               </GradientButton>
             </Link>
           ) : (
-            <button onClick={handleOpenLogin} className="shrink-0">
-              <GradientButton variant="indigo" className="text-xs font-bold px-6">
+            <Link href="/dashboard/map">
+              <GradientButton variant="indigo" className="text-xs font-bold px-6 shrink-0">
                 Masuk Untuk Akses Peta Utama
               </GradientButton>
-            </button>
+            </Link>
           )}
         </div>
 
-        {/* Real Interactive Leaflet OpenStreetMap Container - 100% Spanned and highly responsive */}
-        <div className="w-full min-h-[500px]">
-          <IndonesiaOSMMap 
-            onRegionSelect={(reg) => setSelectedRegion(reg)} 
-            selectedRegionId={selectedRegion.id} 
-          />
+        {/* Real Interactive Leaflet OpenStreetMap Container - wrapped in Link to open full page */}
+        <div className="w-full min-h-[500px] border border-slate-200 rounded-2xl overflow-hidden cursor-pointer hover:shadow-lg transition-all duration-300 relative group">
+          <Link href="/dashboard/map">
+            <div className="pointer-events-none opacity-85 group-hover:opacity-100 transition-opacity">
+              <IndonesiaOSMMap 
+                onRegionSelect={() => {}} 
+                selectedRegionId={selectedRegion.id} 
+              />
+            </div>
+            {/* Hover overlay text */}
+            <div className="absolute inset-0 bg-[#022c1b]/10 group-hover:bg-[#022c1b]/0 flex items-center justify-center transition-all duration-350 pointer-events-none">
+              <span className="bg-[#0b0f19]/90 border border-slate-850 px-4 py-2 rounded-xl text-[10px] font-mono font-bold tracking-widest text-emerald-450 uppercase shadow-xl backdrop-blur-sm transform group-hover:scale-105 transition-transform">
+                Klik untuk Membuka Peta Interaktif SITABA
+              </span>
+            </div>
+          </Link>
         </div>
 
         {/* Selected region analytics drawer below map */}

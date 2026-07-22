@@ -79,17 +79,17 @@ export default function IndonesiaOSMMap({ onRegionSelect, selectedRegionId }: In
   };
 
   return (
-    <div className="w-full bg-[#0b0f19] rounded-2xl border border-slate-800 overflow-hidden shadow-2xl relative z-10 font-sans">
+    <div className="w-full bg-[#0b0f19] rounded-2xl border border-slate-800 overflow-hidden shadow-2xl relative z-10 font-sans leaflet-green-theme">
       
       {/* Mapbox Style Top Command Ribbon */}
       <div className="bg-[#0b0f19] border-b border-slate-800 px-5 py-3 flex justify-between items-center text-[10px] text-slate-400 font-mono tracking-wider">
         <div className="flex items-center gap-3">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-          <span>SISTEM GEOSPASIAL PANGAN AKTIF (CARTODB LIGHT MODULE)</span>
+          <span>SISTEM GEOSPASIAL PANGAN AKTIF (GREEN RADAR MODULE)</span>
         </div>
         <div className="hidden sm:flex items-center gap-4 text-[9px] text-slate-500 font-bold">
-          <span>TAMPILAN: VEKTOR JALAN & BULOG DIVRE</span>
-          <span>KOORDINAT: -2.400 / 118.000</span>
+          <span>TAMPILAN: VEKTOR JALAN & ALARM FISKAL</span>
+          <span>KOORDINAT: -2.200 / 118.000</span>
         </div>
       </div>
 
@@ -101,7 +101,7 @@ export default function IndonesiaOSMMap({ onRegionSelect, selectedRegionId }: In
           className="w-full h-[500px]"
           zoomControl={true}
         >
-          {/* Mapbox Positron light style tiles */}
+          {/* Mapbox Positron light style tiles - styled green via leaflet-green-theme filter */}
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
             url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
@@ -113,29 +113,44 @@ export default function IndonesiaOSMMap({ onRegionSelect, selectedRegionId }: In
             const color = getStatusColor(reg.status);
             
             return (
-              <CircleMarker
-                key={reg.id}
-                center={reg.coords}
-                radius={isSelected ? 18 : 12}
-                pathOptions={{
-                  color: color,
-                  fillColor: color,
-                  fillOpacity: 0.45,
-                  weight: isSelected ? 4 : 2,
-                  className: 'transition-all duration-300 cursor-pointer'
-                }}
-                eventHandlers={{
-                  click: () => onRegionSelect(reg)
-                }}
-              >
-                <Tooltip direction="top" offset={[0, -10]} opacity={0.9} permanent={false}>
-                  <div className="text-[10px] font-bold p-1 flex flex-col gap-0.5">
-                    <span className="text-slate-800 border-b border-slate-100 pb-0.5 font-bold">{reg.name}</span>
-                    <span className="text-slate-500">Status: <span className="font-extrabold" style={{ color }}>{reg.status}</span></span>
-                    <span className="text-slate-700 font-mono">Beras SPHP: Rp {reg.berasPrice.toLocaleString('id-ID')}</span>
-                  </div>
-                </Tooltip>
-              </CircleMarker>
+              <React.Fragment key={reg.id}>
+                {/* Outer pulsing warning radar ring */}
+                <CircleMarker
+                  center={reg.coords}
+                  radius={isSelected ? 32 : 22}
+                  pathOptions={{
+                    color: color,
+                    fillColor: color,
+                    fillOpacity: 0.15,
+                    weight: 1.5,
+                    className: 'animate-pulse pointer-events-none'
+                  }}
+                />
+
+                {/* Inner solid focus marker */}
+                <CircleMarker
+                  center={reg.coords}
+                  radius={isSelected ? 14 : 9}
+                  pathOptions={{
+                    color: '#ffffff',
+                    fillColor: color,
+                    fillOpacity: 0.95,
+                    weight: 2,
+                    className: 'transition-all duration-300 cursor-pointer shadow-md'
+                  }}
+                  eventHandlers={{
+                    click: () => onRegionSelect(reg)
+                  }}
+                >
+                  <Tooltip direction="top" offset={[0, -10]} opacity={0.9} permanent={false}>
+                    <div className="text-[10px] font-bold p-1 flex flex-col gap-0.5">
+                      <span className="text-slate-800 border-b border-slate-100 pb-0.5 font-bold">{reg.name}</span>
+                      <span className="text-slate-500">Status: <span className="font-extrabold" style={{ color }}>{reg.status}</span></span>
+                      <span className="text-slate-700 font-mono">Beras SPHP: Rp {reg.berasPrice.toLocaleString('id-ID')}</span>
+                    </div>
+                  </Tooltip>
+                </CircleMarker>
+              </React.Fragment>
             );
           })}
 
