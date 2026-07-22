@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Outfit, Inter } from 'next/font/google';
+import { Outfit, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -11,10 +11,10 @@ const outfit = Outfit({
   weight: ['300', '400', '500', '600', '700', '800', '900']
 });
 
-const inter = Inter({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  variable: '--font-inter',
-  weight: ['300', '400', '500', '600', '700']
+  variable: '--font-jakarta',
+  weight: ['300', '400', '500', '600', '700', '800']
 });
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${outfit.variable} ${inter.variable}`}>
+    <html lang="id" className={`${outfit.variable} ${plusJakartaSans.variable}`}>
       <body className="min-h-screen bg-white text-slate-900 flex flex-col antialiased">
         <Navbar />
         {/* Soft elegant background glows */}
