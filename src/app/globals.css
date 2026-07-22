@@ -9,7 +9,7 @@
   }
 
   body, html, h1, h2, h3, h4, h5, h6, input, select, textarea, button, p, span, div {
-    font-family: var(--font-inter), system-ui, -apple-system, sans-serif !important;
+    font-family: var(--font-jakarta), system-ui, -apple-system, sans-serif !important;
   }
 
   body {

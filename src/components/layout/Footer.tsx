@@ -38,13 +38,9 @@ export default function Footer() {
               </div>
               <span className="text-lg font-black text-white tracking-wider">SATRISNA</span>
             </div>
-            <p className="text-xs text-slate-400 max-w-sm leading-relaxed font-semibold">
-              Integrasi Analitik Digital Berbasis Model Ekonometrika Time-Series dalam Prediksi Inflasi Pangan dan Simulasi Kebijakan Fiskal untuk Stabilitas Ekonomi Nasional Menuju Indonesia Emas 2045 di Era Volatilitas Global.
+            <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
+              Integrasi Analitik Digital Berbasis Model Ekonometrika Time-Series dalam Prediksi Inflasi Pangan dan Simulasi Kebijakan Fiskal untuk Stabilitas Ekonomi Nasional Menuju Indonesia Emas 2045.
             </p>
-            <div className="flex items-center gap-2 text-xs text-slate-500 font-bold">
-              <Award className="w-4 h-4 text-emerald-400" />
-              <span>Project Inovasi Gemastik 2026 - Divisi Smart City / DSS</span>
-            </div>
           </div>
 
           {/* Quick Links */}

@@ -7,6 +7,18 @@ import { useAuth } from '@/lib/AuthContext';
 import { NEWS_DATA } from '@/lib/data';
 import GradientButton from '@/components/ui/GradientButton';
 import SectionWrapper from '@/components/ui/SectionWrapper';
+import dynamic from 'next/dynamic';
+import { REGIONS, RegionalData } from '@/components/visualization/IndonesiaMap';
+
+// Dynamically load the Leaflet OpenStreetMap component to prevent Next.js SSR build errors on landing page
+const IndonesiaOSMMap = dynamic(() => import('@/components/visualization/IndonesiaOSMMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[400px] bg-slate-900/40 border border-slate-800 rounded-2xl flex items-center justify-center text-xs text-slate-500 font-mono animate-pulse">
+      Memuat Peta Geospasial (OpenStreetMap)...
+    </div>
+  )
+});
 
 export default function Home() {
   const { user } = useAuth();
@@ -19,6 +31,9 @@ export default function Home() {
 
   // Interactive Price Impact Simulator states
   const [priceRise, setPriceRise] = useState(10); // in percent
+
+  // Selected region state for the landing page map
+  const [selectedRegion, setSelectedRegion] = useState<RegionalData>(REGIONS[1]); // Default to Java
 
   // Live calculation of social impact
   const getSocialImpact = (rise: number) => {
@@ -206,7 +221,7 @@ export default function Home() {
               <span className="text-[10px] font-mono tracking-widest font-black uppercase text-emerald-800">[ PILAR 01 ]</span>
             </div>
             <h4 className="text-sm font-black text-slate-800">Kredibilitas Keputusan Berbasis Data Terintegrasi</h4>
-            <p className="text-xs text-slate-500 leading-relaxed font-semibold">
+            <p className="text-xs text-slate-505 leading-relaxed font-semibold">
               SATRISNA hadir sebagai instrumen digital pendukung keputusan kebijakan pangan nasional yang kredibel dan objektif. Dengan memetakan jalur transmisi fiskal belanja negara secara real-time, kami menyelaraskan target stabilitas inflasi pangan volatile food di rentang aman 2.0% - 4.2% demi mendukung kemandirian pangan nasional.
             </p>
           </div>
@@ -216,7 +231,7 @@ export default function Home() {
               <span className="text-[10px] font-mono tracking-widest font-black uppercase text-emerald-800">[ PILAR 02 ]</span>
             </div>
             <h4 className="text-sm font-black text-slate-800">Optimalisasi Anggaran Subsidi & Penyangga Pasar</h4>
-            <p className="text-xs text-slate-500 leading-relaxed font-semibold">
+            <p className="text-xs text-slate-550 leading-relaxed font-semibold">
               Menghubungkan alokasi subsidi input pertanian dengan kecukupan pasok pergudangan eceran secara ilmiah. Penyelarasan ini meminimalisir deviasi anggaran belanja fiskal dan memaksimalkan efektivitas penyaluran beras stabilisasi Bulog.
             </p>
           </div>
@@ -232,7 +247,7 @@ export default function Home() {
         <div className="border-b border-slate-200 pb-6 relative z-10 flex flex-col gap-1.5">
           <span className="text-[9px] font-mono font-black text-emerald-800 uppercase tracking-widest">[ SIMULATOR TRANSMISI SOSIAL ]</span>
           <h3 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight">Dampak Harga Pangan Terhadap Daya Beli Masyarakat</h3>
-          <p className="text-xs text-slate-500 font-semibold leading-relaxed max-w-2xl">
+          <p className="text-xs text-slate-505 font-semibold leading-relaxed max-w-2xl">
             Simulasi interaktif pengaruh lonjakan harga Beras Premium di pasar eceran terhadap volatile food CPI nasional dan penyusutan daya beli ril rumah tangga kelas menengah bawah.
           </p>
         </div>
@@ -240,7 +255,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-8 relative z-10">
           
           {/* Left Block: Modern Controller */}
-          <div className="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-200 flex flex-col gap-6 justify-between shadow-sm">
+          <div className="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-205 flex flex-col gap-6 justify-between shadow-sm">
             <div className="flex flex-col gap-2">
               <span className="text-[8px] font-mono uppercase tracking-widest font-black text-slate-400">Variabel Bebas</span>
               <h4 className="text-xs font-black text-slate-800">Harga Eceran Komoditas</h4>
@@ -249,7 +264,7 @@ export default function Home() {
             <div className="flex flex-col gap-4">
               <div className="flex justify-between text-xs font-bold items-end">
                 <span className="text-slate-650 font-medium">Kenaikan Beras Premium:</span>
-                <span className="text-2xl font-black text-red-650">+{priceRise}%</span>
+                <span className="text-2xl font-black text-red-655">+{priceRise}%</span>
               </div>
               <input 
                 type="range" min="0" max="30" step="1" value={priceRise}
@@ -272,7 +287,7 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               
               {/* Metric 1 */}
-              <div className="bg-white p-6 rounded-2xl border border-slate-200 flex flex-col justify-between shadow-sm min-h-[140px] relative overflow-hidden">
+              <div className="bg-white p-6 rounded-2xl border border-slate-205 flex flex-col justify-between shadow-sm min-h-[140px] relative overflow-hidden">
                 <div className="absolute top-0 right-0 bg-[#022c1b] text-white px-2 py-0.5 text-[7px] font-mono uppercase tracking-wider rounded-bl">
                   Hasil Ril
                 </div>
@@ -290,7 +305,7 @@ export default function Home() {
               </div>
 
               {/* Metric 2 */}
-              <div className="bg-white p-6 rounded-2xl border border-slate-200 flex flex-col justify-between shadow-sm min-h-[140px] relative overflow-hidden">
+              <div className="bg-white p-6 rounded-2xl border border-slate-205 flex flex-col justify-between shadow-sm min-h-[140px] relative overflow-hidden">
                 <div className="absolute top-0 right-0 bg-[#022c1b] text-white px-2 py-0.5 text-[7px] font-mono uppercase tracking-wider rounded-bl">
                   CPI IHK
                 </div>
@@ -304,7 +319,7 @@ export default function Home() {
               </div>
 
               {/* Metric 3 */}
-              <div className="bg-white p-6 rounded-2xl border border-slate-200 flex flex-col justify-between shadow-sm min-h-[140px] relative overflow-hidden">
+              <div className="bg-white p-6 rounded-2xl border border-slate-205 flex flex-col justify-between shadow-sm min-h-[140px] relative overflow-hidden">
                 <div className="absolute top-0 right-0 bg-[#022c1b] text-white px-2 py-0.5 text-[7px] font-mono uppercase tracking-wider rounded-bl">
                   Voucher Retail
                 </div>
@@ -387,7 +402,7 @@ export default function Home() {
           </div>
 
           {/* SVG Mockup of Monte Carlo stochastic paths */}
-          <div className="w-full h-24 bg-[#01140c] rounded-xl border border-emerald-950 relative overflow-hidden flex items-center justify-center p-2 z-10">
+          <div className="w-full h-24 bg-[#01140c] rounded-xl border border-emerald-955 relative overflow-hidden flex items-center justify-center p-2 z-10">
             <svg className="w-full h-full" viewBox="0 0 200 60" fill="none">
               <path d="M10 30 Q 50 25, 100 20 T 190 10" stroke="rgba(16, 185, 129, 0.15)" strokeWidth="1" />
               <path d="M10 30 Q 50 35, 100 40 T 190 50" stroke="rgba(16, 185, 129, 0.15)" strokeWidth="1" />
@@ -417,71 +432,71 @@ export default function Home() {
 
       </SectionWrapper>
 
-      {/* 6. REDESIGNED GEOSPATIAL WARNING SYSTEM: Highly Luxurious presentation linked with Mapbox GIS */}
-      <SectionWrapper className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+      {/* 6. REDESIGNED GEOSPATIAL WARNING SYSTEM: Full-width luxurious OSM Peta Geospasial */}
+      <SectionWrapper className="flex flex-col gap-8 relative z-10">
         
-        {/* Left column (Text & metadata description) */}
-        <div className="lg:col-span-4 flex flex-col gap-6 justify-between h-full py-4">
-          <div className="flex flex-col gap-3">
-            <span className="text-[9px] font-mono tracking-widest font-black uppercase text-emerald-800">[ INTEGRASI MAPBOX GEOSPASIAL ]</span>
-            <h2 className="text-2xl font-black text-[#022c1b] leading-tight">
+        {/* Monospace tag and Title */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-slate-100 pb-6">
+          <div>
+            <span className="text-[9px] font-mono tracking-widest font-black uppercase text-emerald-800">[ INTEGRASI PETA GEOSPASIAL NASIONAL ]</span>
+            <h2 className="text-2xl sm:text-3xl font-black text-[#022c1b] leading-tight mt-1">
               Pemantauan Geografis Kerawanan Pasokan Daerah
             </h2>
-            <p className="text-xs text-slate-500 leading-relaxed font-semibold">
-              SATRISNA memetakan koordinat geospasial kerawanan pangan (Aman, Waspada, Darurat) secara dinamis di seluruh pulau besar Indonesia memanfaatkan engine pemetaan Mapbox. Integrasi data BPS-SP2KP mendeteksi titik defisit stok eceran secara real-time.
+            <p className="text-xs text-slate-500 leading-relaxed font-semibold mt-1 max-w-3xl">
+              SATRISNA memetakan alarm status kerawanan pangan (Aman, Waspada, Darurat) secara dinamis di seluruh provinsi Indonesia menggunakan visualisasi geospasial OpenStreetMap terintegrasi.
             </p>
           </div>
-
           {user ? (
             <Link href="/dashboard">
-              <GradientButton variant="indigo" className="text-xs self-start px-6">
-                Buka Peta Stabilitas Nasional &rarr;
+              <GradientButton variant="indigo" className="text-xs px-6 font-bold shrink-0">
+                Buka Peta Analisis Utama &rarr;
               </GradientButton>
             </Link>
           ) : (
-            <button onClick={handleOpenLogin} className="self-start">
+            <button onClick={handleOpenLogin} className="shrink-0">
               <GradientButton variant="indigo" className="text-xs font-bold px-6">
-                Masuk Untuk Akses Peta Geografis &rarr;
+                Masuk Untuk Akses Peta Utama &rarr;
               </GradientButton>
             </button>
           )}
         </div>
 
-        {/* Right column: Highly realistic mapbox preview card */}
-        <div className="lg:col-span-8 bg-[#0b0f19] border border-slate-800 rounded-3xl p-5 shadow-2xl relative overflow-hidden flex flex-col gap-4">
-          
-          <div className="flex justify-between items-center text-[8px] text-slate-400 font-mono tracking-widest border-b border-slate-800 pb-3">
-            <span>MAPBOX RENDER ENGINE // LIVE PREVIEW SUMATERA-PAPUA</span>
-            <span className="text-emerald-500">ENGINE ONLINE</span>
+        {/* Real Interactive Leaflet OpenStreetMap Container - 100% Spanned and highly responsive */}
+        <div className="w-full min-h-[400px]">
+          <IndonesiaOSMMap 
+            onRegionSelect={(reg) => setSelectedRegion(reg)} 
+            selectedRegionId={selectedRegion.id} 
+          />
+        </div>
+
+        {/* Selected region analytics drawer below map */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 p-6 bg-slate-50 rounded-2xl border border-slate-200 mt-2 text-xs font-semibold leading-relaxed font-mono shadow-sm">
+          <div className="flex flex-col gap-1 border-r border-slate-200/80 pr-4">
+            <span className="text-[9px] text-slate-400 uppercase">Wilayah Terpantau</span>
+            <span className="text-sm font-black text-slate-800">{selectedRegion.name}</span>
           </div>
-
-          {/* SVG Map rendering stylized vector representing Leaflet/Mapbox vector layer */}
-          <div className="h-[220px] flex items-center justify-center relative bg-slate-900/40 rounded-xl border border-slate-850 p-2">
-            <svg className="w-full max-w-[420px] h-full text-slate-500 opacity-60" viewBox="0 0 180 80">
-              {/* Sumatra */}
-              <path d="M15 25 L35 45 L40 55 L35 60 L25 50 L10 35 Z" fill="#2d3748" stroke="#4a5568" strokeWidth="0.5" />
-              {/* Java */}
-              <path d="M40 60 L50 60 L70 65 L85 67 L80 70 L60 67 L40 62 Z" fill="#2d3748" stroke="#4a5568" strokeWidth="0.5" />
-              {/* Kalimantan */}
-              <path d="M60 28 L80 25 L90 35 L85 48 L70 50 L60 40 Z" fill="#2d3748" stroke="#4a5568" strokeWidth="0.5" />
-              {/* Sulawesi */}
-              <path d="M100 32 L115 32 L115 36 L105 40 L112 50 L100 46 L95 38 Z" fill="#2d3748" stroke="#4a5568" strokeWidth="0.5" />
-              {/* Papua */}
-              <path d="M140 35 L160 33 L175 40 L175 55 L155 53 L140 42 Z" fill="#2d3748" stroke="#4a5568" strokeWidth="0.5" />
-              
-              {/* Glowing radar target points */}
-              <circle cx="28" cy="40" r="3" fill="#f59e0b" className="animate-ping" />
-              <circle cx="62" cy="64" r="3.5" fill="#10b981" />
-              <circle cx="158" cy="45" r="4.5" fill="#ef4444" className="animate-pulse" />
-            </svg>
-
-            {/* Radar Coordinates Info */}
-            <div className="absolute bottom-3 left-3 bg-[#0b0f19]/80 border border-slate-800 p-2 rounded text-[7px] text-slate-400 font-mono flex flex-col gap-0.5">
-              <span>LAT: -4.000 (PAPUA)</span>
-              <span>INDEX: KRITIS (IMPOR DARURAT)</span>
-            </div>
+          <div className="flex flex-col gap-1 border-r border-slate-200/80 pr-4">
+            <span className="text-[9px] text-slate-400 uppercase">Status Kerawanan</span>
+            <span className={`text-xs font-black uppercase ${
+              selectedRegion.status === 'Darurat' ? 'text-red-655' :
+              selectedRegion.status === 'Waspada' ? 'text-amber-600' :
+              'text-emerald-700'
+            }`}>
+              {selectedRegion.status}
+            </span>
           </div>
-
+          <div className="flex flex-col gap-1 border-r border-slate-200/80 pr-4">
+            <span className="text-[9px] text-slate-400 uppercase">Indeks Harga Beras</span>
+            <span className="text-xs font-black text-slate-850">Rp {selectedRegion.berasPrice.toLocaleString('id-ID')} / kg</span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-[9px] text-slate-400 uppercase">Rekomendasi BPS</span>
+            <p className="text-[10px] text-slate-500 font-sans font-semibold leading-normal">
+              {selectedRegion.status === 'Darurat' ? 'Operasi pasar CBP intensif dan percepatan distribusi beras penolong.' :
+               selectedRegion.status === 'Waspada' ? 'Pantau pergerakan harga eceran dan batasi spekulasi tingkat agen.' :
+               'Wilayah terpantau aman dan pasokan gudang lokal memadai.'}
+            </p>
+          </div>
         </div>
 
       </SectionWrapper>
@@ -517,7 +532,7 @@ export default function Home() {
                   )}
                 </h3>
                 
-                <p className="text-xs text-slate-500 leading-relaxed font-semibold line-clamp-3">
+                <p className="text-xs text-slate-505 leading-relaxed font-semibold line-clamp-3">
                   {news.summary}
                 </p>
               </div>
@@ -531,51 +546,66 @@ export default function Home() {
         </div>
       </SectionWrapper>
 
-      {/* 8. REDESIGNED MATRIKS STANDAR TATA KELOLA (Luxury Cards Grid - 4px forest-green borders, no icons) */}
-      <SectionWrapper className="flex flex-col gap-8 relative z-10 border-t border-slate-150 pt-16">
-        <div>
-          <span className="text-[10px] font-mono font-black text-emerald-800 uppercase tracking-widest block mb-1">[ STANDAR TATA KELOLA ]</span>
-          <h2 className="text-2xl font-black text-[#022c1b] leading-tight">
-            Akurasi Ilmiah. Pemodelan Profesional yang Dapat Diandalkan.
-          </h2>
-          <p className="text-xs text-slate-550 mt-1 font-semibold">
-            Standar Keamanan Pangan & Tata Kelola Keuangan Negara Berkelanjutan
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-xs text-slate-655 mt-4">
+      {/* 8. LUXURIOUS DEEP FOREST GREEN TATA KELOLA MATRIX SECTION (Absolute visual masterpiece, no icons) */}
+      <SectionWrapper className="w-full relative z-10">
+        <div className="bg-gradient-to-tr from-[#021f13] to-[#05321f] text-white p-8 sm:p-14 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col gap-10 border border-emerald-950">
           
-          {/* Card 1 */}
-          <div className="bg-white border-t-4 border-t-[#022c1b] border-x border-b border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between min-h-[160px]">
-            <div className="flex flex-col gap-2">
-              <span className="text-[8.5px] font-mono uppercase tracking-wider text-emerald-700 font-extrabold">[ STANDAR 01 ]</span>
-              <h3 className="text-sm font-black text-slate-800">Stabilitas CBP</h3>
-            </div>
-            <p className="text-[11px] text-slate-500 font-medium leading-relaxed mt-3">
-              Menjaga kecukupan cadangan beras pemerintah (CBP) minimal 1 juta ton sebagai instrumen utama stabilisasi pasokan pasar nasional.
+          {/* Subtle coordinates grid lines within matrix block */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+          
+          {/* Header */}
+          <div className="relative z-10 flex flex-col gap-2 max-w-2xl border-b border-emerald-900/60 pb-6">
+            <span className="text-[9px] font-mono tracking-widest font-black uppercase text-emerald-455">[ MATRIKS STANDAR TATA KELOLA ]</span>
+            <h2 className="text-xl sm:text-3xl font-black text-white leading-snug">
+              Akurasi Ilmiah & Tata Kelola Keuangan Negara Berkelanjutan
+            </h2>
+            <p className="text-xs text-slate-350 font-medium leading-relaxed mt-1">
+              Metodologi integrasi data ekonometrika pangan eceran BPS-SP2KP diselaraskan untuk mengawal batas aman belanja APBN.
             </p>
           </div>
 
-          {/* Card 2 */}
-          <div className="bg-white border-t-4 border-t-[#022c1b] border-x border-b border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between min-h-[160px]">
-            <div className="flex flex-col gap-2">
-              <span className="text-[8.5px] font-mono uppercase tracking-wider text-emerald-700 font-extrabold">[ STANDAR 02 ]</span>
-              <h3 className="text-sm font-black text-slate-800">Mitigasi Volatilitas</h3>
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+            
+            {/* Card 1 */}
+            <div className="bg-emerald-950/45 border border-emerald-900/60 p-6 rounded-2xl flex flex-col justify-between hover:border-[#10b981] hover:bg-emerald-950/65 transition-all duration-300 min-h-[180px] shadow-sm">
+              <div className="flex flex-col gap-3">
+                <span className="w-8 h-8 rounded-full bg-emerald-900/80 border border-emerald-800 flex items-center justify-center text-[10px] font-mono font-bold text-emerald-450">
+                  01
+                </span>
+                <h3 className="text-sm font-black text-white">Stabilitas Cadangan Pemerintah</h3>
+              </div>
+              <p className="text-[11px] text-slate-300 font-medium leading-relaxed mt-4">
+                Menjaga kecukupan cadangan beras pemerintah (CBP) minimal 1 juta ton sebagai instrumen utama stabilisasi pasokan pasar nasional.
+              </p>
             </div>
-            <p className="text-[11px] text-slate-500 font-medium leading-relaxed mt-3">
-              Meredam dampak heteroskedastisitas harga musiman dan volatilitas pasokan global dengan algoritma time-series GARCH terkalibrasi.
-            </p>
-          </div>
 
-          {/* Card 3 */}
-          <div className="bg-white border-t-4 border-t-[#022c1b] border-x border-b border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between min-h-[160px]">
-            <div className="flex flex-col gap-2">
-              <span className="text-[8.5px] font-mono uppercase tracking-wider text-emerald-700 font-extrabold">[ STANDAR 03 ]</span>
-              <h3 className="text-sm font-black text-slate-800">Literasi Poin</h3>
+            {/* Card 2 */}
+            <div className="bg-emerald-950/45 border border-emerald-900/60 p-6 rounded-2xl flex flex-col justify-between hover:border-[#10b981] hover:bg-emerald-950/65 transition-all duration-300 min-h-[180px] shadow-sm">
+              <div className="flex flex-col gap-3">
+                <span className="w-8 h-8 rounded-full bg-emerald-900/80 border border-emerald-800 flex items-center justify-center text-[10px] font-mono font-bold text-emerald-400">
+                  02
+                </span>
+                <h3 className="text-sm font-black text-white">Mitigasi Volatilitas Pasar</h3>
+              </div>
+              <p className="text-[11px] text-slate-300 font-medium leading-relaxed mt-4">
+                Meredam dampak heteroskedastisitas harga musiman dan volatilitas pasokan global dengan pemodelan time-series GARCH terkalibrasi.
+              </p>
             </div>
-            <p className="text-[11px] text-slate-500 font-medium leading-relaxed mt-3">
-              Edu-kuis interaktif bernilai poin sembako yang dapat ditukarkan langsung di jaringan mitra retail CSR guna meningkatkan literasi ekonomi.
-            </p>
+
+            {/* Card 3 */}
+            <div className="bg-emerald-950/45 border border-emerald-900/60 p-6 rounded-2xl flex flex-col justify-between hover:border-[#10b981] hover:bg-emerald-950/65 transition-all duration-300 min-h-[180px] shadow-sm">
+              <div className="flex flex-col gap-3">
+                <span className="w-8 h-8 rounded-full bg-emerald-900/80 border border-emerald-800 flex items-center justify-center text-[10px] font-mono font-bold text-emerald-400">
+                  03
+                </span>
+                <h3 className="text-sm font-black text-white">Literasi Keuangan Masyarakat</h3>
+              </div>
+              <p className="text-[11px] text-slate-300 font-medium leading-relaxed mt-4">
+                Edu-kuis interaktif bernilai poin sembako yang dapat ditukarkan langsung di jaringan mitra retail CSR guna meningkatkan literasi pangan pokok.
+              </p>
+            </div>
+
           </div>
 
         </div>
