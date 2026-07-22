@@ -18,11 +18,47 @@ const IndonesiaOSMMap = dynamic(() => import('@/components/visualization/Indones
 import SectionWrapper from '@/components/ui/SectionWrapper';
 import AnimatedCounter from '@/components/ui/AnimatedCounter';
 import GradientButton from '@/components/ui/GradientButton';
-import { Layers, Activity, ShieldAlert, Map, Info, AlertTriangle, ShieldCheck, XCircle, Lock } from 'lucide-react';
+import { Layers, Activity, ShieldAlert, Map, Info, AlertTriangle, ShieldCheck, XCircle, Lock, Rss } from 'lucide-react';
 
 export default function Dashboard() {
   const { user } = useAuth();
   const [selectedRegion, setSelectedRegion] = useState<RegionalData>(REGIONS[1]); // Java default
+
+  // Regional news list inspired by "Update Terbaru" in disaster portal (Image 2)
+  const NEWS_ALERTS = [
+    {
+      id: 'sumatera',
+      title: 'Pelepasan Cadangan Beras SPHP',
+      location: 'Prov. Sumatera Utara',
+      date: '22/07/2026',
+      desc: 'BULOG Medan menggelar operasi pasar eceran di 4 pasar induk tradisional guna meredam aksi spekulasi pedagang.',
+      type: 'Waspada'
+    },
+    {
+      id: 'papua',
+      title: 'Defisit Suplai Gabah & Logistik',
+      location: 'Prov. Papua',
+      date: '21/07/2026',
+      desc: 'Terjadi keterlambatan kapal logistik akibat cuaca buruk di perairan timur, memicu lonjakan harga Beras Premium.',
+      type: 'Darurat'
+    },
+    {
+      id: 'jawa',
+      title: 'Panen Raya Padi Musim Gadu',
+      location: 'Prov. Jawa',
+      date: '20/07/2026',
+      desc: 'Kabupaten Indramayu dan Karawang memasuki puncak panen padi. Suplai ke pasar Cipinang Jakarta terpantau aman.',
+      type: 'Aman'
+    },
+    {
+      id: 'sulawesi',
+      title: 'Anomali Suplai Cabai Musiman',
+      location: 'Prov. Sulawesi',
+      date: '19/07/2026',
+      desc: 'Hujan deras berkepanjangan memicu gagal panen cabai rawit di wilayah sentra tani Minahasa.',
+      type: 'Waspada'
+    }
+  ];
 
   const generalStats = [
     { title: 'Volatile Food CPI', value: 5.4, decimals: 1, suffix: '%', desc: 'Indeks volatile food BPS terkini' },
@@ -73,14 +109,13 @@ export default function Dashboard() {
         </div>
         <div className="flex flex-col gap-2">
           <h2 className="text-lg font-black text-slate-800">Akses Portal Terbatas</h2>
-          <p className="text-xs text-slate-500 max-w-sm leading-relaxed font-semibold">
+          <p className="text-xs text-slate-505 max-w-sm leading-relaxed font-semibold">
             Dashboard Utama Ekonometrika dan Simulasi Kebijakan Fiskal Pangan memerlukan otentikasi identitas pejabat negara atau mahasiswa terdaftar.
           </p>
         </div>
         <span className="text-[10px] text-slate-400 font-mono">Status: UNAUTHORIZED (401)</span>
         <button 
           onClick={() => {
-            // Trigger login modal by clicking the navbar login button programmatically or asking user to click it
             const loginBtn = document.querySelector('button[class*="Masuk Portal"]') as HTMLButtonElement;
             if (loginBtn) loginBtn.click();
           }}
@@ -129,29 +164,96 @@ export default function Dashboard() {
         ))}
       </SectionWrapper>
 
-      {/* SITABA style Indonesia Map alert monitoring */}
+      {/* SITABA & Disaster Portal Style Map Monitoring Panel */}
       <SectionWrapper className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm flex flex-col gap-6">
-        <div className="border-b border-slate-100 pb-3 flex items-center gap-2">
-          <Map className="w-5 h-5 text-emerald-700" />
-          <div>
-            <h2 className="text-sm font-black text-slate-800">
-              Peta Kerawanan Pasokan & Harga Pangan Provinsi (SITABA Style)
-            </h2>
-            <p className="text-[10px] text-slate-500">
-              Memantau peringatan stok komoditas strategis secara visual di seluruh pulau besar Indonesia.
-            </p>
+        
+        {/* Title Header */}
+        <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Map className="w-5 h-5 text-emerald-700" />
+            <div>
+              <h2 className="text-sm font-black text-slate-800">
+                Sistem Peta Geospasial Kerawanan Pasokan & Kebijakan Pangan
+              </h2>
+              <p className="text-[10px] text-slate-500">
+                Pemantauan real-time koordinat gudang Bulog, pasar tradisional, dan indeks stabilitas harga beras eceran.
+              </p>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          <div className="lg:col-span-2">
+        {/* Floating Alert Bar inspired by Disaster Portal (Image 2) */}
+        <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl flex items-center justify-between text-xs font-semibold shadow-sm">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping shrink-0" />
+            <span>1 Peringatan Kerawanan Pangan Aktif: Provinsi Papua saat ini berstatus DARURAT karena hambatan transportasi laut.</span>
+          </div>
+          <button 
+            onClick={() => {
+              const papuaReg = REGIONS.find(r => r.id === 'papua');
+              if (papuaReg) setSelectedRegion(papuaReg);
+            }} 
+            className="bg-red-750 text-white px-2.5 py-1 rounded text-[10px] hover:bg-red-850 transition-colors uppercase font-mono font-bold"
+          >
+            Fokus Lokasi
+          </button>
+        </div>
+
+        {/* Main Grid: Left Column (Map 70%) & Right Column (Update Terbaru Feed 30%) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Map Column */}
+          <div className="lg:col-span-8 flex flex-col gap-6">
             <IndonesiaOSMMap 
               onRegionSelect={(reg) => setSelectedRegion(reg)} 
               selectedRegionId={selectedRegion.id} 
             />
           </div>
 
-          <div className="lg:col-span-1 bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col gap-4 shadow-sm">
+          {/* Side Feed: Update Terbaru Pangan inspired by Image 2 */}
+          <div className="lg:col-span-4 flex flex-col gap-4 border border-slate-200 rounded-2xl p-4 bg-slate-50 max-h-[432px] overflow-y-auto">
+            <div className="flex items-center gap-1.5 border-b border-slate-200 pb-2 mb-1">
+              <Rss className="w-4 h-4 text-[#064e3b]" />
+              <span className="text-xs font-black text-slate-800 uppercase tracking-wide">Kabar & Peringatan Terbaru</span>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              {NEWS_ALERTS.map((alert, idx) => (
+                <div 
+                  key={idx} 
+                  onClick={() => {
+                    const match = REGIONS.find(r => r.id === alert.id);
+                    if (match) setSelectedRegion(match);
+                  }}
+                  className="bg-white p-3 rounded-xl border border-slate-200 hover:border-emerald-600 hover:shadow-md cursor-pointer transition-all duration-200 flex flex-col gap-1.5"
+                >
+                  <div className="flex justify-between items-start gap-2">
+                    <span className="text-[10px] font-black text-slate-800 leading-snug">{alert.title}</span>
+                    <span className={`text-[7px] px-1.5 py-0.5 rounded font-mono font-bold uppercase tracking-wider ${
+                      alert.type === 'Darurat' ? 'bg-red-50 text-red-655 border border-red-200' :
+                      alert.type === 'Waspada' ? 'bg-amber-50 text-amber-800 border border-amber-200' :
+                      'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                    }`}>
+                      {alert.type}
+                    </span>
+                  </div>
+                  <p className="text-[9px] text-slate-500 font-semibold leading-relaxed line-clamp-2">{alert.desc}</p>
+                  <div className="flex justify-between items-center text-[7px] text-slate-400 font-mono pt-1 border-t border-slate-100">
+                    <span>{alert.location}</span>
+                    <span>{alert.date}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+
+        {/* Selected Region info & Two Statistical Cards inspired by Disaster Portal (Image 2) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-4 border-t border-slate-100 pt-6">
+          
+          {/* Selected Region info panel (4 Columns) */}
+          <div className="lg:col-span-4 bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col gap-4 shadow-sm">
             <div className="flex justify-between items-start border-b border-slate-200 pb-3">
               <div>
                 <span className="text-[9px] text-slate-400 uppercase font-bold tracking-widest block">Wilayah Terpilih</span>
@@ -190,16 +292,82 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="mt-2 bg-[#f4f9f6] p-4 rounded-xl border border-emerald-100 flex flex-col gap-1.5 text-xs text-slate-600 font-medium">
+            <div className="bg-[#f4f9f6] p-4 rounded-xl border border-emerald-100 flex flex-col gap-1.5 text-xs text-slate-600 font-medium">
               <span className="font-bold text-[#064e3b] flex items-center gap-1.5">
-                <Info className="w-4 h-4" /> Saran Stabilisasi (Sederhana):
+                <Info className="w-4 h-4" /> Saran Stabilisasi Pangan:
               </span>
-              <p className="leading-relaxed">
+              <p className="leading-relaxed text-[11px]">
                 {getELI5Recommendation(selectedRegion)}
               </p>
             </div>
           </div>
+
+          {/* Card 1: Statistik Distribusi Logistik Bulog (4 Columns) */}
+          <div className="lg:col-span-4 bg-white p-5 rounded-2xl border border-slate-200 flex flex-col justify-between min-h-[220px] shadow-sm">
+            <div className="flex flex-col gap-1 border-b border-slate-150 pb-2">
+              <span className="text-[8px] font-mono text-blue-600 uppercase tracking-wider font-black">[ LAPORAN FISIK ]</span>
+              <h4 className="text-xs font-black text-slate-800">Statistik Distribusi Logistik Bulog</h4>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 my-4">
+              <div className="flex flex-col">
+                <span className="text-[20px] font-black text-blue-700">145.000</span>
+                <span className="text-[9px] text-slate-500 font-bold uppercase">Total SPHP dilepas (Ton)</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[20px] font-black text-slate-800">7 Unit</span>
+                <span className="text-[9px] text-slate-500 font-bold uppercase">Gudang Divre Terpantau</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[20px] font-black text-slate-800">14 Titik</span>
+                <span className="text-[9px] text-slate-500 font-bold uppercase">Pasar Tradisional SP2KP</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[20px] font-black text-emerald-700">92%</span>
+                <span className="text-[9px] text-slate-500 font-bold uppercase">Indeks Salur Distribusi</span>
+              </div>
+            </div>
+
+            <div className="text-[8px] text-slate-400 font-mono border-t border-slate-100 pt-2 flex justify-between">
+              <span>SUMBER: BULOG DIVRE LOGISTIK</span>
+              <span>TERKINI: 22-07-2026</span>
+            </div>
+          </div>
+
+          {/* Card 2: Statistik Alarm Kerawanan Pangan (4 Columns) */}
+          <div className="lg:col-span-4 bg-white p-5 rounded-2xl border border-slate-200 flex flex-col justify-between min-h-[220px] shadow-sm">
+            <div className="flex flex-col gap-1 border-b border-slate-150 pb-2">
+              <span className="text-[8px] font-mono text-red-600 uppercase tracking-wider font-black">[ DETEKSI ALARM ]</span>
+              <h4 className="text-xs font-black text-slate-800">Statistik Alarm Kerawanan Pangan</h4>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 my-4">
+              <div className="flex flex-col">
+                <span className="text-[20px] font-black text-red-655">1 Prov</span>
+                <span className="text-[9px] text-slate-550 font-bold uppercase">Status Darurat (Kritis)</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[20px] font-black text-amber-600">2 Prov</span>
+                <span className="text-[9px] text-slate-550 font-bold uppercase">Status Waspada (Pantau)</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[20px] font-black text-emerald-700">4 Prov</span>
+                <span className="text-[9px] text-slate-550 font-bold uppercase">Status Aman (Mantap)</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[20px] font-black text-[#022c1b]">3.82%</span>
+                <span className="text-[9px] text-slate-550 font-bold uppercase">Volatile Food CPI Rata-Rata</span>
+              </div>
+            </div>
+
+            <div className="text-[8px] text-slate-400 font-mono border-t border-slate-100 pt-2 flex justify-between">
+              <span>SUMBER: BPS SP2KP INFLASI</span>
+              <span>TERKINI: 22-07-2026</span>
+            </div>
+          </div>
+
         </div>
+
       </SectionWrapper>
 
       {/* Main Section: Forecaster Workspace */}
@@ -219,7 +387,7 @@ export default function Dashboard() {
 
           <InflationPredictor />
           
-          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex gap-2 text-[10px] text-slate-500 leading-normal font-medium">
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex gap-2 text-[10px] text-slate-505 leading-normal font-medium">
             <ShieldAlert className="w-5 h-5 text-emerald-700 shrink-0" />
             <span>
               Integrasi engine analitik time-series terkalibrasi secara dinamis untuk mengantisipasi gejolak anomali pasokan hortikultura dan logistik energi global.
