@@ -1,21 +1,16 @@
 import type { Metadata } from 'next';
-import { Outfit, Plus_Jakarta_Sans } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import AIChatbot from '@/components/ai/AIChatbot';
 import { AuthProvider } from '@/lib/AuthContext';
 
-const outfit = Outfit({
+// Load Inter Google Font - matching Pertamina's exact geometric sans-serif aesthetic
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-outfit',
+  variable: '--font-inter',
   weight: ['300', '400', '500', '600', '700', '800', '900']
-});
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  variable: '--font-jakarta',
-  weight: ['300', '400', '500', '600', '700', '800']
 });
 
 export const metadata: Metadata = {
@@ -32,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${outfit.variable} ${plusJakartaSans.variable}`}>
+    <html lang="id" className={inter.variable}>
       <body className="min-h-screen bg-white text-slate-900 flex flex-col antialiased">
         <AuthProvider>
           <Navbar />
