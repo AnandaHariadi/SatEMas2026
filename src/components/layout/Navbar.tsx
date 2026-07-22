@@ -4,27 +4,23 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
-  Layers, Menu, X, ArrowUpRight, ShieldCheck, 
-  LogIn, User, LogOut, Wallet, Check, Eye, EyeOff
+  Layers, Menu, X, ShieldCheck, 
+  LogIn, LogOut, Wallet, Eye, EyeOff
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth, UserProfile } from '@/lib/AuthContext';
 import GradientButton from '../ui/GradientButton';
-
-export interface UserProfile {
-  name: string;
-  role: 'Regulator BPS/BI' | 'Akademisi/Mahasiswa' | 'UMKM / Masyarakat';
-  nipOrId: string;
-  points: number;
-}
 
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   
-  // Auth state
+  // Shared Auth context
+  const { user, login, logout } = useAuth();
+  
+  // Login modal toggle
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [user, setUser] = useState<UserProfile | null>(null);
   
   // Login form state
   const [selectedRole, setSelectedRole] = useState<UserProfile['role']>('Regulator BPS/BI');
@@ -40,16 +36,29 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: 'Dashboard Utama', href: '/dashboard' },
-    { name: 'Ekonometrika', href: '/dashboard/prediction' },
-    { name: 'Simulasi Fiskal', href: '/dashboard/simulation' },
-    { name: 'Edukasi Pangan', href: '/dashboard/learning' }
-  ];
+  // Determine navbar links dynamically based on login status
+  const navLinks = user 
+    ? [
+        { name: 'Dashboard Utama', href: '/dashboard' },
+        { name: 'Ekonometrika', href: '/dashboard/prediction' },
+        { name: 'Simulasi Fiskal', href: '/dashboard/simulation' },
+        { name: 'Edukasi Pangan', href: '/dashboard/learning' }
+      ]
+    : [
+        { name: 'Beranda Utama', href: '/' },
+        { name: 'Tentang Kami', href: '/#tentang' },
+        { name: 'Fitur Utama', href: '/#fitur' },
+        { name: 'Mitra Strategis', href: '/#mitra' }
+      ];
 
-  const isActive = (path: string) => pathname === path || pathname?.startsWith(path + '/');
+  const isActive = (path: string) => {
+    if (path.startsWith('/#') || path === '/') {
+      const hash = typeof window !== 'undefined' ? window.location.hash : '';
+      return pathname === '/' && pathname + hash === path;
+    }
+    return pathname === path || pathname?.startsWith(path + '/');
+  };
 
-  // Pre-fill fields based on role selection for convenience
   const handleRoleChange = (role: UserProfile['role']) => {
     setSelectedRole(role);
     if (role === 'Regulator BPS/BI') {
@@ -66,22 +75,13 @@ export default function Navbar() {
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setUser({
-      name: inputName,
-      role: selectedRole,
-      nipOrId: inputId,
-      points: selectedRole === 'Regulator BPS/BI' ? 250 : selectedRole === 'Akademisi/Mahasiswa' ? 120 : 75
-    });
+    login(inputName, selectedRole, inputId);
     setIsLoginOpen(false);
-  };
-
-  const handleLogout = () => {
-    setUser(null);
   };
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-350 ${
+      <nav className={`fixed top-0 left-0 w-full z-45 transition-all duration-350 ${
         scrolled 
           ? 'py-3 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm' 
           : 'py-5 bg-white border-b border-slate-100'
@@ -134,7 +134,7 @@ export default function Navbar() {
                     <span className="text-[8px] text-slate-450 font-semibold">{user.role}</span>
                   </div>
                   
-                  {/* User Profile Avatar with dropdown trigger placeholder */}
+                  {/* User Profile Avatar */}
                   <div className="relative group/avatar">
                     <button className="w-8 h-8 rounded-full bg-emerald-50 border border-emerald-250 flex items-center justify-center text-xs font-black text-[#022c1b] cursor-pointer hover:bg-emerald-100 transition-colors">
                       {user.name.substring(0, 2).toUpperCase()}
@@ -155,7 +155,7 @@ export default function Navbar() {
                       </div>
 
                       <button 
-                        onClick={handleLogout}
+                        onClick={logout}
                         className="w-full text-left px-4 py-2.5 hover:bg-red-50 text-xs font-bold text-red-600 flex items-center gap-2 cursor-pointer transition-colors"
                       >
                         <LogOut className="w-4 h-4" /> Keluar Portal
@@ -221,7 +221,7 @@ export default function Navbar() {
                   </div>
                   <button 
                     onClick={() => {
-                      handleLogout();
+                      logout();
                       setIsOpen(false);
                     }}
                     className="w-full text-center py-2.5 rounded-lg border border-red-200 text-xs font-bold text-red-600 flex items-center justify-center gap-1 hover:bg-red-50 transition-colors cursor-pointer"
@@ -246,7 +246,7 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* 3. POPUP LOGIN OVERLAY DIALOG (Victory-style interactive overlay) */}
+      {/* 3. POPUP LOGIN OVERLAY DIALOG */}
       <AnimatePresence>
         {isLoginOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">

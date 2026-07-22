@@ -3,19 +3,46 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { evaluatePolicyImpact } from '@/lib/econometrics-engine';
+import { useAuth } from '@/lib/AuthContext';
 import GradientButton from '@/components/ui/GradientButton';
 import SectionWrapper from '@/components/ui/SectionWrapper';
 import { 
   ArrowRight, ShieldCheck, Cpu, TrendingUp, Sparkles, 
-  Sprout, CheckCircle, Award, Database, BarChart3
+  Sprout, CheckCircle, Award, ShieldAlert, BarChart3, 
+  Map, DollarSign, Activity, AlertTriangle
 } from 'lucide-react';
 
 export default function Home() {
+  const { user } = useAuth();
+  
+  // Quick Simulator states inside the Hero form
   const [pupukSlider, setPupukSlider] = useState(40);
   const [importSlider, setImportSlider] = useState(0.8);
   const [bulogSlider, setBulogSlider] = useState(55);
-
   const policy = evaluatePolicyImpact(pupukSlider, importSlider, bulogSlider);
+
+  // Interactive Price Impact Simulator states
+  const [priceRise, setPriceRise] = useState(10); // in percent
+
+  // Live calculation of social impact
+  const getSocialImpact = (rise: number) => {
+    const power = Math.max(50, 100 - rise * 1.2);
+    const inflation = (rise * 0.28).toFixed(2);
+    let status: 'Aman' | 'Waspada' | 'Kritis' = 'Aman';
+    let recommendation = 'Kondisi harga stabil. Pantau distribusi logistik rutin.';
+    
+    if (rise > 20) {
+      status = 'Kritis';
+      recommendation = '🚨 DARURAT: Harga melambung tinggi! Perum BULOG wajib melepas cadangan pemerintah (CBP) 50 ribu ton dan Kemenkeu mengalokasikan dana darurat pangan.';
+    } else if (rise > 8) {
+      status = 'Waspada';
+      recommendation = '⚠️ WASPADA: Harga mulai mahal. BULOG disarankan melakukan operasi pasar SPHP di retail tradisional untuk menekan spekulasi pedagang.';
+    }
+
+    return { power, inflation, status, recommendation };
+  };
+
+  const social = getSocialImpact(priceRise);
 
   const PARTNERS = [
     { name: 'Badan Pusat Statistik', initial: 'BPS' },
@@ -25,11 +52,17 @@ export default function Home() {
     { name: 'Kementerian Pertanian', initial: 'KEMENTAN' }
   ];
 
+  const handleOpenLogin = () => {
+    // Triggers the login modal by programmatically clicking Navbar's Login button
+    const loginBtn = document.querySelector('button[class*="Masuk Portal"]') as HTMLButtonElement;
+    if (loginBtn) loginBtn.click();
+  };
+
   return (
-    <div className="flex flex-col gap-24 pb-24 bg-white">
+    <div className="flex flex-col gap-28 pb-24 bg-white">
       
-      {/* 1. HERO SECTION (Iceberg Rounded Card Layout) */}
-      <SectionWrapper className="w-full">
+      {/* 1. HERO SECTION (Victory/SaaS Rounded Card Layout) */}
+      <SectionWrapper id="hero" className="w-full">
         <div className="bg-gradient-to-tr from-[#021f13] via-[#05321f] to-[#0a5c36] text-white p-8 sm:p-14 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col lg:flex-row gap-12 lg:items-center">
           
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.18),transparent_60%)] pointer-events-none" />
@@ -48,18 +81,28 @@ export default function Home() {
             </h1>
             
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-semibold max-w-lg">
-              SATRISNA mengintegrasikan model kuantitatif ekonometrika time-series ARIMA/GARCH dan simulasi Monte Carlo untuk mengoptimalkan efisiensi anggaran belanja subsidi pupuk APBN, kuota impor beras, dan logistik SPHP Bulog secara terukur.
+              SATRISNA mengintegrasikan pemodelan ekonometrika time-series ARIMA/GARCH terkalibrasi dengan simulasi Monte Carlo untuk mengoptimalkan perumusan anggaran belanja subsidi pupuk APBN, kuota impor beras, dan logistik SPHP Bulog secara terukur.
             </p>
             
             <div className="flex flex-wrap items-center gap-4 mt-2">
-              <Link href="/dashboard">
-                <GradientButton variant="emerald" className="px-6 py-3 font-bold text-xs sm:text-sm shadow-xl shadow-emerald-500/20">
-                  Buka Dashboard Utama <ArrowRight className="w-4 h-4" />
+              {user ? (
+                <Link href="/dashboard">
+                  <GradientButton variant="emerald" className="px-6 py-3 font-bold text-xs sm:text-sm shadow-xl shadow-emerald-500/20">
+                    Masuk Dashboard Utama <ArrowRight className="w-4 h-4" />
+                  </GradientButton>
+                </Link>
+              ) : (
+                <GradientButton 
+                  variant="emerald" 
+                  onClick={handleOpenLogin}
+                  className="px-6 py-3 font-bold text-xs sm:text-sm shadow-xl shadow-emerald-500/20"
+                >
+                  Masuk Portal Penstabil <ArrowRight className="w-4 h-4" />
                 </GradientButton>
-              </Link>
-              <Link href="/dashboard/learning" className="text-xs text-slate-300 hover:text-emerald-400 font-bold flex items-center gap-0.5 transition-colors">
-                Modul Edukasi Pangan &rarr;
-              </Link>
+              )}
+              <a href="#fitur" className="text-xs text-slate-300 hover:text-emerald-400 font-bold transition-colors">
+                Eksplorasi Fitur Pangan &darr;
+              </a>
             </div>
           </div>
 
@@ -108,18 +151,26 @@ export default function Home() {
               </div>
             </div>
 
-            <Link href="/dashboard" className="w-full">
-              <GradientButton variant="indigo" className="w-full text-xs font-bold py-3 shadow-md shadow-emerald-900/10">
-                Detail Simulasi Monte Carlo
-              </GradientButton>
-            </Link>
+            {user ? (
+              <Link href="/dashboard/simulation" className="w-full">
+                <GradientButton variant="indigo" className="w-full text-xs font-bold py-3 shadow-md shadow-emerald-900/10">
+                  Detail Simulasi Monte Carlo
+                </GradientButton>
+              </Link>
+            ) : (
+              <button onClick={handleOpenLogin} className="w-full">
+                <GradientButton variant="indigo" className="w-full text-xs font-bold py-3 shadow-md shadow-emerald-900/10">
+                  Log In Untuk Akses Detail
+                </GradientButton>
+              </button>
+            )}
           </div>
 
         </div>
       </SectionWrapper>
 
       {/* 2. PARTNERS LOGO RIBBON */}
-      <SectionWrapper className="-mt-14 border-b border-slate-100 pb-10">
+      <SectionWrapper id="mitra" className="-mt-14 border-b border-slate-100 pb-10">
         <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6 text-slate-400 font-black text-sm tracking-wider uppercase">
           {PARTNERS.map((p, idx) => (
             <div key={idx} className="flex items-center gap-2 hover:text-slate-600 transition-colors">
@@ -132,7 +183,7 @@ export default function Home() {
       </SectionWrapper>
 
       {/* 3. ABOUT US / POLICY DESCRIPTION */}
-      <SectionWrapper className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+      <SectionWrapper id="tentang" className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
         <div className="md:col-span-1">
           <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block mb-2">SATRISNA Platform</span>
           <h2 className="text-2xl sm:text-3xl font-black text-[#022c1b] leading-tight">
@@ -150,8 +201,89 @@ export default function Home() {
         </div>
       </SectionWrapper>
 
+      {/* NEW: INTERACTIVE PRICE IMPACT SIMULATOR (Highly Visual, useful for laypeople) */}
+      <SectionWrapper className="bg-slate-50 p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-6">
+        <div className="border-b border-slate-200 pb-4">
+          <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block mb-1">Edukasi Transmisi Sosial</span>
+          <h3 className="text-lg font-black text-slate-800">Simulator Dampak Harga Pangan Terhadap Daya Beli</h3>
+          <p className="text-xs text-slate-500 mt-1 font-semibold">
+            Geser slider untuk melihat bagaimana lonjakan harga beras di pasar eceran secara langsung memicu inflasi volatile food dan memengaruhi daya beli dompet rakyat.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+          
+          {/* Left Column: Sliders */}
+          <div className="lg:col-span-1 bg-white p-5 rounded-2xl border border-slate-200 flex flex-col gap-4">
+            <span className="text-[9px] uppercase tracking-widest font-black text-slate-400">Harga Komoditas Eceran</span>
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between text-xs font-bold">
+                <span className="text-slate-600">Kenaikan Harga Beras Premium:</span>
+                <span className="text-red-650 font-black">+{priceRise}%</span>
+              </div>
+              <input 
+                type="range" min="0" max="30" step="1" value={priceRise}
+                onChange={(e) => setPriceRise(parseInt(e.target.value))}
+                className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-[#ef4444]"
+              />
+              <div className="flex justify-between text-[8px] text-slate-400 font-bold">
+                <span>0% Stabil (Normal)</span>
+                <span>30% Shock Pasok (Krisis)</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Middle Column: Live Indicators */}
+          <div className="lg:col-span-2 flex flex-col gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-bold">
+              
+              {/* Power gauge */}
+              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-1">
+                <span className="text-[9px] text-slate-400 uppercase">Daya Beli Dompet Rakyat</span>
+                <span className="text-xl font-black text-slate-800">{social.power.toFixed(0)}%</span>
+                <span className={`text-[9px] px-2 py-0.5 rounded-full self-start ${
+                  social.status === 'Kritis' ? 'bg-red-50 text-red-700 border border-red-200' :
+                  social.status === 'Waspada' ? 'bg-amber-50 text-amber-750 border border-amber-200' :
+                  'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                }`}>
+                  Status: {social.status}
+                </span>
+              </div>
+
+              {/* Inflation gauge */}
+              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-1">
+                <span className="text-[9px] text-slate-400 uppercase">Dampak Laju Inflasi IHK</span>
+                <span className="text-xl font-black text-red-650">+{social.inflation}%</span>
+                <span className="text-[8px] text-slate-400 font-medium">Volatile Food Basket</span>
+              </div>
+
+              {/* Points equivalency logic */}
+              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-1">
+                <span className="text-[9px] text-slate-400 uppercase">Voucher Subsidi Mitra</span>
+                <span className="text-xl font-black text-[#022c1b]">
+                  {priceRise > 15 ? 'Voucher 10kg Gratis' : 'Voucher 5kg Gratis'}
+                </span>
+                <span className="text-[8px] text-slate-400 font-medium">Melalui Dompet Poin Kuis</span>
+              </div>
+
+            </div>
+
+            {/* Recommendation panel */}
+            <div className="bg-white p-4 rounded-xl border border-slate-200 flex gap-3 text-xs text-slate-655 font-semibold leading-relaxed shadow-sm">
+              <ShieldAlert className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
+              <div>
+                <span className="font-black text-[#022c1b] block mb-1">Rekomendasi Respons Kebijakan:</span>
+                <p>{social.recommendation}</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </SectionWrapper>
+
       {/* 4. PREVIEW SHOWCASE TWO-COLUMNS (Avian Grid Style with SVG vector mocks) */}
-      <SectionWrapper className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <SectionWrapper id="fitur" className="grid grid-cols-1 md:grid-cols-2 gap-8">
         
         {/* Card 1: ARIMA */}
         <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 flex flex-col justify-between gap-6 shadow-sm hover:border-emerald-350 transition-all duration-300 group">
@@ -177,11 +309,19 @@ export default function Home() {
             </svg>
           </div>
 
-          <Link href="/dashboard/prediction" className="self-start">
-            <GradientButton variant="glass" className="text-xs px-4 font-bold">
-              Explore Predictions &rarr;
-            </GradientButton>
-          </Link>
+          {user ? (
+            <Link href="/dashboard/prediction" className="self-start">
+              <GradientButton variant="glass" className="text-xs px-4 font-bold">
+                Eksplorasi Prediksi &rarr;
+              </GradientButton>
+            </Link>
+          ) : (
+            <button onClick={handleOpenLogin} className="self-start">
+              <GradientButton variant="glass" className="text-xs px-4 font-bold">
+                Eksplorasi Prediksi (Login) &rarr;
+              </GradientButton>
+            </button>
+          )}
         </div>
 
         {/* Card 2: Monte Carlo */}
@@ -201,30 +341,80 @@ export default function Home() {
           {/* SVG Mockup of Monte Carlo stochastic paths */}
           <div className="w-full h-24 bg-slate-50 rounded-xl border border-slate-150 relative overflow-hidden flex items-center justify-center p-2">
             <svg className="w-full h-full" viewBox="0 0 200 60" fill="none">
-              {/* Paths */}
               <path d="M10 30 Q 50 25, 100 20 T 190 10" stroke="rgba(16, 185, 129, 0.15)" strokeWidth="1" />
               <path d="M10 30 Q 50 35, 100 40 T 190 50" stroke="rgba(16, 185, 129, 0.15)" strokeWidth="1" />
               <path d="M10 30 Q 50 28, 100 25 T 190 22" stroke="rgba(16, 185, 129, 0.15)" strokeWidth="1" />
               <path d="M10 30 Q 50 32, 100 35 T 190 38" stroke="rgba(16, 185, 129, 0.15)" strokeWidth="1" />
-              {/* Median */}
               <path d="M10 30 Q 50 30, 100 30 T 190 30" stroke="#064e3b" strokeWidth="2.5" />
-              {/* Corridor bounds */}
               <line x1="10" y1="18" x2="190" y2="18" stroke="#ef4444" strokeWidth="1" strokeDasharray="3,3" />
               <line x1="10" y1="42" x2="190" y2="42" stroke="#ef4444" strokeWidth="1" strokeDasharray="3,3" />
               <text x="140" y="14" className="fill-red-500 font-mono text-[6px]">Target Bounds</text>
             </svg>
           </div>
 
-          <Link href="/dashboard/simulation" className="self-start">
-            <GradientButton variant="glass" className="text-xs px-4 font-bold">
-              Explore Simulations &rarr;
-            </GradientButton>
-          </Link>
+          {user ? (
+            <Link href="/dashboard/simulation" className="self-start">
+              <GradientButton variant="glass" className="text-xs px-4 font-bold">
+                Eksplorasi Simulasi &rarr;
+              </GradientButton>
+            </Link>
+          ) : (
+            <button onClick={handleOpenLogin} className="self-start">
+              <GradientButton variant="glass" className="text-xs px-4 font-bold">
+                Eksplorasi Simulasi (Login) &rarr;
+              </GradientButton>
+            </button>
+          )}
         </div>
 
       </SectionWrapper>
 
-      {/* 5. FULL-WIDTH TEXT & FEATURES */}
+      {/* 5. SITABA REGIONAL WARNING SYSTEM PREVIEW */}
+      <SectionWrapper className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div className="flex flex-col gap-5">
+          <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block">SITABA GIS Integration</span>
+          <h2 className="text-2xl sm:text-3xl font-black text-[#022c1b] leading-tight">
+            Pemantauan Geografis Kerawanan Pasokan Daerah
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-medium">
+            SATRISNA memetakan alarm status kerawanan pangan (Aman, Waspada, Darurat) secara dinamis di seluruh pulau besar Indonesia. Memudahkan regulator memantau titik defisit pasokan secara cepat.
+          </p>
+          {user ? (
+            <Link href="/dashboard">
+              <GradientButton variant="indigo" className="text-xs self-start">
+                Buka Peta Stabilitas &rarr;
+              </GradientButton>
+            </Link>
+          ) : (
+            <button onClick={handleOpenLogin} className="self-start">
+              <GradientButton variant="indigo" className="text-xs">
+                Log In Untuk Buka Peta &rarr;
+              </GradientButton>
+            </button>
+          )}
+        </div>
+
+        {/* Mini geographical mock map widget */}
+        <div className="bg-slate-50 border border-slate-200 p-6 rounded-3xl shadow-sm flex flex-col gap-4 relative overflow-hidden h-[240px] items-center justify-center">
+          <Map className="w-8 h-8 text-emerald-700/60 absolute top-4 left-4" />
+          <svg className="w-full max-w-[360px] h-[160px] text-slate-400" viewBox="0 0 180 80">
+            {/* Sumatra */}
+            <path d="M15 25 L35 45 L40 55 L35 60 L25 50 L10 35 Z" fill="#fef3c7" stroke="#f59e0b" strokeWidth="0.5" />
+            {/* Java */}
+            <path d="M40 60 L50 60 L70 65 L85 67 L80 70 L60 67 L40 62 Z" fill="#d1fae5" stroke="#10b981" strokeWidth="0.5" />
+            {/* Kalimantan */}
+            <path d="M60 28 L80 25 L90 35 L85 48 L70 50 L60 40 Z" fill="#fef3c7" stroke="#f59e0b" strokeWidth="0.5" />
+            {/* Sulawesi */}
+            <path d="M100 32 L115 32 L115 36 L105 40 L112 50 L100 46 L95 38 Z" fill="#d1fae5" stroke="#10b981" strokeWidth="0.5" />
+            {/* Papua */}
+            <path d="M140 35 L160 33 L175 40 L175 55 L155 53 L140 42 Z" fill="#fee2e2" stroke="#ef4444" strokeWidth="0.5" />
+            <text x="145" y="46" className="fill-red-800 text-[5px] font-bold">PAPUA: DARURAT</text>
+            <text x="45" y="75" className="fill-emerald-800 text-[5px] font-bold">JAWA: AMAN</text>
+          </svg>
+        </div>
+      </SectionWrapper>
+
+      {/* 6. FULL-WIDTH TEXT & FEATURES */}
       <SectionWrapper className="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-6 items-center text-center">
         <div className="max-w-2xl flex flex-col gap-2">
           <h2 className="text-xl sm:text-2xl font-black text-slate-800">

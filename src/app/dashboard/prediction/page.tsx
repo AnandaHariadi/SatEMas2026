@@ -1,11 +1,43 @@
 "use client";
 
 import React from 'react';
+import { useAuth } from '@/lib/AuthContext';
 import InflationPredictor from '@/components/ai/InflationPredictor';
 import SectionWrapper from '@/components/ui/SectionWrapper';
-import { TrendingUp, BookOpen, Sparkles } from 'lucide-react';
+import GradientButton from '@/components/ui/GradientButton';
+import { TrendingUp, BookOpen, Sparkles, Lock } from 'lucide-react';
 
 export default function PredictionPage() {
+  const { user } = useAuth();
+
+  if (!user) {
+    return (
+      <SectionWrapper className="flex flex-col items-center justify-center min-h-[450px] text-center gap-5 bg-white border border-slate-200 p-8 rounded-3xl shadow-sm max-w-xl mx-auto my-12">
+        <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#022c1b]">
+          <Lock className="w-7 h-7" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <h2 className="text-lg font-black text-slate-800">Akses Portal Terbatas</h2>
+          <p className="text-xs text-slate-500 max-w-sm leading-relaxed font-semibold">
+            Modul Prediksi Ekonometrika ARIMA/GARCH memerlukan otentikasi identitas pejabat negara atau mahasiswa terdaftar.
+          </p>
+        </div>
+        <span className="text-[10px] text-slate-400 font-mono">Status: UNAUTHORIZED (401)</span>
+        <button 
+          onClick={() => {
+            const loginBtn = document.querySelector('button[class*="Masuk Portal"]') as HTMLButtonElement;
+            if (loginBtn) loginBtn.click();
+          }}
+          className="mt-2"
+        >
+          <GradientButton variant="indigo" className="text-xs">
+            Masuk Portal Sekarang &rarr;
+          </GradientButton>
+        </button>
+      </SectionWrapper>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-8 pb-16">
       
@@ -27,7 +59,7 @@ export default function PredictionPage() {
         <InflationPredictor />
       </SectionWrapper>
 
-      {/* Econometric Model Guide - Redesigned with min-h and flex for perfect grid alignment */}
+      {/* Econometric Model Guide */}
       <SectionWrapper className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex flex-col justify-between min-h-[240px]">

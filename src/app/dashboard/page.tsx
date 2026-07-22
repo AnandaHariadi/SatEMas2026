@@ -1,13 +1,16 @@
 "use client";
 
 import React, { useState } from 'react';
+import { useAuth } from '@/lib/AuthContext';
 import InflationPredictor from '@/components/ai/InflationPredictor';
 import IndonesiaMap, { REGIONS, RegionalData } from '@/components/visualization/IndonesiaMap';
 import SectionWrapper from '@/components/ui/SectionWrapper';
 import AnimatedCounter from '@/components/ui/AnimatedCounter';
-import { Layers, Activity, ShieldAlert, Map, Info, AlertTriangle, ShieldCheck, XCircle } from 'lucide-react';
+import GradientButton from '@/components/ui/GradientButton';
+import { Layers, Activity, ShieldAlert, Map, Info, AlertTriangle, ShieldCheck, XCircle, Lock } from 'lucide-react';
 
 export default function Dashboard() {
+  const { user } = useAuth();
   const [selectedRegion, setSelectedRegion] = useState<RegionalData>(REGIONS[1]); // Java default
 
   const generalStats = [
@@ -40,7 +43,6 @@ export default function Dashboard() {
     }
   };
 
-  // Simplified ELI5 (Explain Like I'm 5) recommendation text based on status
   const getELI5Recommendation = (region: RegionalData) => {
     if (region.status === 'Aman') {
       return `Bagus! Wilayah ${region.name} saat ini memiliki stok makanan yang cukup di pasar. Harganya pun stabil karena panen tani lokal berjalan lancar. Pemerintah hanya perlu memantau agar tidak ada pengiriman beras keluar daerah secara berlebihan.`;
@@ -48,9 +50,38 @@ export default function Dashboard() {
     if (region.status === 'Waspada') {
       return `Hati-hati! Harga beras eceran di ${region.name} mulai sedikit mahal (Rp ${region.berasPrice.toLocaleString('id-ID')}/Kg). Hal ini disebabkan pasokan dari petani lokal berkurang karena musim kemarau. Saran sederhana: Distribusikan cadangan beras cadangan Bulog untuk menyeimbangkan pasar.`;
     }
-    // Darurat
     return `Gawat! Stok makanan di ${region.name} sedang menipis dan harganya melambung tinggi sekali. Hal ini terjadi karena jarak pengiriman kapal laut yang jauh dan terganggu ombak besar global. Saran mendesak: Segera datangkan bantuan beras impor khusus untuk menurunkan harga dengan cepat agar warga tidak kelaparan.`;
   };
+
+  // Auth Gate: limit dashboard access
+  if (!user) {
+    return (
+      <SectionWrapper className="flex flex-col items-center justify-center min-h-[450px] text-center gap-5 bg-white border border-slate-200 p-8 rounded-3xl shadow-sm max-w-xl mx-auto my-12">
+        <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#022c1b]">
+          <Lock className="w-7 h-7" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <h2 className="text-lg font-black text-slate-800">Akses Portal Terbatas</h2>
+          <p className="text-xs text-slate-500 max-w-sm leading-relaxed font-semibold">
+            Dashboard Utama Ekonometrika dan Simulasi Kebijakan Fiskal Pangan memerlukan otentikasi identitas pejabat negara atau mahasiswa terdaftar.
+          </p>
+        </div>
+        <span className="text-[10px] text-slate-400 font-mono">Status: UNAUTHORIZED (401)</span>
+        <button 
+          onClick={() => {
+            // Trigger login modal by clicking the navbar login button programmatically or asking user to click it
+            const loginBtn = document.querySelector('button[class*="Masuk Portal"]') as HTMLButtonElement;
+            if (loginBtn) loginBtn.click();
+          }}
+          className="mt-2"
+        >
+          <GradientButton variant="indigo" className="text-xs">
+            Masuk Portal Sekarang &rarr;
+          </GradientButton>
+        </button>
+      </SectionWrapper>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-8 pb-16">
@@ -63,7 +94,7 @@ export default function Dashboard() {
             Dashboard Statistik Pangan Nasional
           </h1>
           <p className="text-xs text-slate-500 mt-1 font-semibold">
-            Pantau peramalan komoditas pangan pokok dan ajukan simulasi intervensi fiskal BPS/BI.
+            Selamat datang kembali, <span className="text-emerald-800 font-bold">{user.name}</span>. Silakan pantau peramalan komoditas pangan pokok.
           </p>
         </div>
         <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-emerald-50 border border-emerald-250 text-[10px]">
@@ -72,11 +103,11 @@ export default function Dashboard() {
         </div>
       </SectionWrapper>
 
-      {/* KPI Cards Row (SITABA Dashboard style) */}
+      {/* KPI Cards Row */}
       <SectionWrapper className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {generalStats.map((stat, idx) => (
           <div key={idx} className="bg-white border border-slate-200 p-5 rounded-2xl flex flex-col gap-1 shadow-sm">
-            <span className="text-[10px] text-slate-400 uppercase font-black tracking-wider">
+            <span className="text-[10px] text-slate-455 uppercase font-bold tracking-wider">
               {stat.title}
             </span>
             <div className="text-2xl font-black text-slate-800">
@@ -87,7 +118,7 @@ export default function Dashboard() {
         ))}
       </SectionWrapper>
 
-      {/* NEW: SITABA style Indonesia Map alert monitoring */}
+      {/* SITABA style Indonesia Map alert monitoring */}
       <SectionWrapper className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm flex flex-col gap-6">
         <div className="border-b border-slate-100 pb-3 flex items-center gap-2">
           <Map className="w-5 h-5 text-emerald-700" />
@@ -102,7 +133,6 @@ export default function Dashboard() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          {/* Map display spans 2 cols */}
           <div className="lg:col-span-2">
             <IndonesiaMap 
               onRegionSelect={(reg) => setSelectedRegion(reg)} 
@@ -110,7 +140,6 @@ export default function Dashboard() {
             />
           </div>
 
-          {/* Regional alert detail panel */}
           <div className="lg:col-span-1 bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col gap-4 shadow-sm">
             <div className="flex justify-between items-start border-b border-slate-200 pb-3">
               <div>
@@ -150,7 +179,6 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* ELI5 simple recommendations */}
             <div className="mt-2 bg-[#f4f9f6] p-4 rounded-xl border border-emerald-100 flex flex-col gap-1.5 text-xs text-slate-600 font-medium">
               <span className="font-bold text-[#064e3b] flex items-center gap-1.5">
                 <Info className="w-4 h-4" /> Saran Stabilisasi (Sederhana):
