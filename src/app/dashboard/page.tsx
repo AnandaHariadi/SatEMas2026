@@ -3,7 +3,18 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 import InflationPredictor from '@/components/ai/InflationPredictor';
-import IndonesiaMap, { REGIONS, RegionalData } from '@/components/visualization/IndonesiaMap';
+import dynamic from 'next/dynamic';
+import { REGIONS, RegionalData } from '@/components/visualization/IndonesiaMap';
+
+// Dynamically load the Leaflet OpenStreetMap component to prevent Next.js SSR errors
+const IndonesiaOSMMap = dynamic(() => import('@/components/visualization/IndonesiaOSMMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[360px] bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-center text-xs text-slate-505 font-bold animate-pulse">
+      Memuat Peta Kerawanan Pangan (OpenStreetMap)...
+    </div>
+  )
+});
 import SectionWrapper from '@/components/ui/SectionWrapper';
 import AnimatedCounter from '@/components/ui/AnimatedCounter';
 import GradientButton from '@/components/ui/GradientButton';
@@ -134,7 +145,7 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           <div className="lg:col-span-2">
-            <IndonesiaMap 
+            <IndonesiaOSMMap 
               onRegionSelect={(reg) => setSelectedRegion(reg)} 
               selectedRegionId={selectedRegion.id} 
             />

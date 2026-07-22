@@ -33,10 +33,10 @@ export default function Home() {
     
     if (rise > 20) {
       status = 'Kritis';
-      recommendation = '🚨 DARURAT: Harga melambung tinggi! Perum BULOG wajib melepas cadangan pemerintah (CBP) 50 ribu ton dan Kemenkeu mengalokasikan dana darurat pangan.';
+      recommendation = 'STATUS DARURAT: Harga melambung tinggi. Perum BULOG wajib melepas cadangan pemerintah (CBP) sebanyak 50 ribu ton dan Kemenkeu mengalokasikan dana darurat pangan.';
     } else if (rise > 8) {
       status = 'Waspada';
-      recommendation = '⚠️ WASPADA: Harga mulai mahal. BULOG disarankan melakukan operasi pasar SPHP di retail tradisional untuk menekan spekulasi pedagang.';
+      recommendation = 'STATUS WASPADA: Harga mulai mahal. BULOG disarankan melakukan operasi pasar SPHP di retail tradisional untuk menekan spekulasi pedagang.';
     }
 
     return { power, inflation, status, recommendation };
@@ -53,42 +53,45 @@ export default function Home() {
   ];
 
   const handleOpenLogin = () => {
-    // Triggers the login modal by programmatically clicking Navbar's Login button
     const loginBtn = document.querySelector('button[class*="Masuk Portal"]') as HTMLButtonElement;
     if (loginBtn) loginBtn.click();
   };
 
   return (
-    <div className="flex flex-col gap-28 pb-24 bg-white">
+    <div className="flex flex-col gap-24 pb-24 bg-white relative">
       
-      {/* 1. HERO SECTION (Victory/SaaS Rounded Card Layout) */}
-      <SectionWrapper id="hero" className="w-full">
-        <div className="bg-gradient-to-tr from-[#021f13] via-[#05321f] to-[#0a5c36] text-white p-8 sm:p-14 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col lg:flex-row gap-12 lg:items-center">
+      {/* Premium Engineering Dot Grid Overlay for the entire body */}
+      <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] pointer-events-none opacity-50 z-0" />
+
+      {/* 1. HERO SECTION (Victory/SaaS Rounded Card Layout with Forest Green Gradient & Coordinates Grid) */}
+      <SectionWrapper id="hero" className="w-full relative z-10">
+        <div className="bg-gradient-to-tr from-[#021f13] to-[#0a5c36] text-white p-8 sm:p-14 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col lg:flex-row gap-12 lg:items-center border border-emerald-950">
           
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.18),transparent_60%)] pointer-events-none" />
+          {/* Engineering coordinate lines ornament */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(16,185,129,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.04)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
           <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" />
 
           {/* Left Column: Headline */}
           <div className="flex-1 flex flex-col gap-6 relative z-10">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-black tracking-wider uppercase text-emerald-400 self-start shadow-sm">
-              <Sparkles className="w-3.5 h-3.5" />
-              Sistem Keputusan Penstabil Pangan Nasional BPS/BI
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-950 border border-emerald-500/30 text-[10px] font-black tracking-wider uppercase text-emerald-400 self-start shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-[#10b981]" />
+              Sistem Penunjang Keputusan Terpadu BPS & Bank Indonesia
             </span>
             
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-[1.15]">
-              Mengawal Stabilitas Pangan.<br />
-              Menopang Ekonomi Nasional.
+              Ketahanan Pangan Kuat.<br />
+              Stabilitas Ekonomi Terjamin.
             </h1>
             
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-semibold max-w-lg">
-              SATRISNA mengintegrasikan pemodelan ekonometrika time-series ARIMA/GARCH terkalibrasi dengan simulasi Monte Carlo untuk mengoptimalkan perumusan anggaran belanja subsidi pupuk APBN, kuota impor beras, dan logistik SPHP Bulog secara terukur.
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-semibold max-w-lg font-sans">
+              SATRISNA mengintegrasikan pemodelan ekonometrika time-series ARIMA/GARCH terkalibrasi dengan simulasi Monte Carlo untuk mengoptimalkan anggaran subsidi pupuk APBN, kuota impor pangan, dan logistik SPHP Bulog secara terukur.
             </p>
             
             <div className="flex flex-wrap items-center gap-4 mt-2">
               {user ? (
                 <Link href="/dashboard">
                   <GradientButton variant="emerald" className="px-6 py-3 font-bold text-xs sm:text-sm shadow-xl shadow-emerald-500/20">
-                    Masuk Dashboard Utama <ArrowRight className="w-4 h-4" />
+                    Masuk Dashboard Utama &rarr;
                   </GradientButton>
                 </Link>
               ) : (
@@ -97,17 +100,17 @@ export default function Home() {
                   onClick={handleOpenLogin}
                   className="px-6 py-3 font-bold text-xs sm:text-sm shadow-xl shadow-emerald-500/20"
                 >
-                  Masuk Portal Penstabil <ArrowRight className="w-4 h-4" />
+                  Masuk Portal Penstabil &rarr;
                 </GradientButton>
               )}
-              <a href="#fitur" className="text-xs text-slate-300 hover:text-emerald-400 font-bold transition-colors">
+              <a href="#fitur" className="text-xs text-slate-300 hover:text-emerald-450 font-bold transition-colors">
                 Eksplorasi Fitur Pangan &darr;
               </a>
             </div>
           </div>
 
           {/* Right Column: Quick Simulation Form Card */}
-          <div className="w-full lg:w-[380px] bg-white text-slate-800 p-6 rounded-2xl shadow-2xl border border-slate-100 relative z-10 flex flex-col gap-5">
+          <div className="w-full lg:w-[380px] bg-white text-slate-800 p-6 rounded-2xl shadow-2xl border border-slate-200 relative z-10 flex flex-col gap-5">
             <div>
               <span className="text-[8px] uppercase tracking-widest font-black text-slate-400 block">Kalkulator Kebijakan Cepat</span>
               <h3 className="text-sm font-black text-[#022c1b]">Simulasi Stabilitas Pangan</h3>
@@ -160,7 +163,7 @@ export default function Home() {
             ) : (
               <button onClick={handleOpenLogin} className="w-full">
                 <GradientButton variant="indigo" className="w-full text-xs font-bold py-3 shadow-md shadow-emerald-900/10">
-                  Log In Untuk Akses Detail
+                  Masuk Untuk Akses Detail
                 </GradientButton>
               </button>
             )}
@@ -170,7 +173,7 @@ export default function Home() {
       </SectionWrapper>
 
       {/* 2. PARTNERS LOGO RIBBON */}
-      <SectionWrapper id="mitra" className="-mt-14 border-b border-slate-100 pb-10">
+      <SectionWrapper id="mitra" className="-mt-14 border-b border-slate-150 pb-10 relative z-10">
         <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6 text-slate-400 font-black text-sm tracking-wider uppercase">
           {PARTNERS.map((p, idx) => (
             <div key={idx} className="flex items-center gap-2 hover:text-slate-600 transition-colors">
@@ -183,12 +186,12 @@ export default function Home() {
       </SectionWrapper>
 
       {/* 3. ABOUT US / POLICY DESCRIPTION */}
-      <SectionWrapper id="tentang" className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+      <SectionWrapper id="tentang" className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start relative z-10">
         <div className="md:col-span-1">
           <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block mb-2">SATRISNA Platform</span>
           <h2 className="text-2xl sm:text-3xl font-black text-[#022c1b] leading-tight">
             Keunggulan Kuantitatif<br />
-            Ekonometrika Pangan. 🌾
+            Ekonometrika Pangan
           </h2>
         </div>
         <div className="md:col-span-2 text-xs sm:text-sm text-slate-500 leading-relaxed font-semibold flex flex-col gap-4">
@@ -201,9 +204,12 @@ export default function Home() {
         </div>
       </SectionWrapper>
 
-      {/* NEW: INTERACTIVE PRICE IMPACT SIMULATOR (Highly Visual, useful for laypeople) */}
-      <SectionWrapper className="bg-slate-50 p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-6">
-        <div className="border-b border-slate-200 pb-4">
+      {/* 4. INTERACTIVE PRICE IMPACT SIMULATOR (Highly Visual, useful for laypeople) */}
+      <SectionWrapper className="bg-slate-50 p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-6 relative z-10">
+        {/* Subtle grid pattern inside */}
+        <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none opacity-20" />
+        
+        <div className="border-b border-slate-200 pb-4 relative z-10">
           <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block mb-1">Edukasi Transmisi Sosial</span>
           <h3 className="text-lg font-black text-slate-800">Simulator Dampak Harga Pangan Terhadap Daya Beli</h3>
           <p className="text-xs text-slate-500 mt-1 font-semibold">
@@ -211,7 +217,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center relative z-10">
           
           {/* Left Column: Sliders */}
           <div className="lg:col-span-1 bg-white p-5 rounded-2xl border border-slate-200 flex flex-col gap-4">
@@ -243,7 +249,7 @@ export default function Home() {
                 <span className="text-xl font-black text-slate-800">{social.power.toFixed(0)}%</span>
                 <span className={`text-[9px] px-2 py-0.5 rounded-full self-start ${
                   social.status === 'Kritis' ? 'bg-red-50 text-red-700 border border-red-200' :
-                  social.status === 'Waspada' ? 'bg-amber-50 text-amber-750 border border-amber-200' :
+                  social.status === 'Waspada' ? 'bg-amber-50 text-amber-850 border border-amber-200' :
                   'bg-emerald-50 text-emerald-800 border border-emerald-200'
                 }`}>
                   Status: {social.status}
@@ -282,86 +288,92 @@ export default function Home() {
         </div>
       </SectionWrapper>
 
-      {/* 4. PREVIEW SHOWCASE TWO-COLUMNS (Avian Grid Style with SVG vector mocks) */}
-      <SectionWrapper id="fitur" className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* 5. PREVIEW SHOWCASE TWO-COLUMNS (Avian Grid Style with SVG vector mocks in Forest Green background) */}
+      <SectionWrapper id="fitur" className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
         
         {/* Card 1: ARIMA */}
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 flex flex-col justify-between gap-6 shadow-sm hover:border-emerald-350 transition-all duration-300 group">
-          <div className="flex flex-col gap-4">
-            <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-100 text-[#022c1b] self-start shadow-sm">
+        <div className="bg-[#021f13] border border-emerald-900 rounded-3xl p-6 sm:p-8 flex flex-col justify-between gap-6 shadow-sm hover:border-[#10b981] transition-all duration-300 group text-white relative overflow-hidden">
+          {/* Geometric lines within card */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(16,185,129,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+          
+          <div className="flex flex-col gap-4 relative z-10">
+            <div className="p-3 bg-emerald-950 rounded-2xl border border-emerald-850 text-emerald-400 self-start shadow-sm">
               <TrendingUp className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-slate-800 mb-2">Forecasting Studio & Volatility Modeling</h3>
-              <p className="text-xs text-slate-500 leading-relaxed font-semibold">
+              <h3 className="text-lg font-black text-white mb-2">Studio Peramalan & Pemodelan Volatilitas Harga</h3>
+              <p className="text-xs text-slate-300 leading-relaxed font-semibold">
                 Menganalisis pergerakan harga komoditas pangan pokok secara harian dan bulanan dengan presisi tinggi. Menggunakan filter lag ARIMA untuk menangkap tren struktural jangka panjang dan GARCH untuk memetakan kluster volatilitas.
               </p>
             </div>
           </div>
 
           {/* SVG Mockup of TimeSeries ARIMA Line graph */}
-          <div className="w-full h-24 bg-slate-50 rounded-xl border border-slate-150 relative overflow-hidden flex items-center justify-center p-2">
+          <div className="w-full h-24 bg-[#01140c] rounded-xl border border-emerald-950 relative overflow-hidden flex items-center justify-center p-2 z-10">
             <svg className="w-full h-full text-emerald-600" viewBox="0 0 200 60" fill="none">
-              <path d="M10 40 Q 30 20, 50 35 T 90 20 T 130 38 T 170 15 T 190 25" stroke="#064e3b" strokeWidth="2" fill="none" />
+              <path d="M10 40 Q 30 20, 50 35 T 90 20 T 130 38 T 170 15 T 190 25" stroke="#10b981" strokeWidth="2.5" fill="none" />
               <path d="M130 38 T 170 15 T 190 25 L 190 45 L 130 45 Z" fill="rgba(16, 185, 129, 0.08)" stroke="rgba(16,185,129,0.2)" strokeWidth="1" strokeDasharray="2,2" />
-              <line x1="130" y1="5" x2="130" y2="55" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="3,3" />
-              <text x="135" y="12" className="fill-slate-400 font-mono text-[7px]">Forecast Start</text>
+              <line x1="130" y1="5" x2="130" y2="55" stroke="#05321f" strokeWidth="1" strokeDasharray="3,3" />
+              <text x="135" y="12" className="fill-emerald-650 font-mono text-[7px]">Awal Peramalan</text>
             </svg>
           </div>
 
           {user ? (
-            <Link href="/dashboard/prediction" className="self-start">
-              <GradientButton variant="glass" className="text-xs px-4 font-bold">
-                Eksplorasi Prediksi &rarr;
+            <Link href="/dashboard/prediction" className="self-start relative z-10">
+              <GradientButton variant="emerald" className="text-xs px-4 font-bold">
+                Eksplorasi Hasil Prediksi &rarr;
               </GradientButton>
             </Link>
           ) : (
-            <button onClick={handleOpenLogin} className="self-start">
-              <GradientButton variant="glass" className="text-xs px-4 font-bold">
-                Eksplorasi Prediksi (Login) &rarr;
+            <button onClick={handleOpenLogin} className="self-start relative z-10">
+              <GradientButton variant="emerald" className="text-xs px-4 font-bold">
+                Eksplorasi Hasil Prediksi (Masuk) &rarr;
               </GradientButton>
             </button>
           )}
         </div>
 
         {/* Card 2: Monte Carlo */}
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 flex flex-col justify-between gap-6 shadow-sm hover:border-emerald-350 transition-all duration-300 group">
-          <div className="flex flex-col gap-4">
-            <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-100 text-[#022c1b] self-start shadow-sm">
+        <div className="bg-[#021f13] border border-emerald-900 rounded-3xl p-6 sm:p-8 flex flex-col justify-between gap-6 shadow-sm hover:border-[#10b981] transition-all duration-300 group text-white relative overflow-hidden">
+          {/* Geometric lines within card */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(16,185,129,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+          
+          <div className="flex flex-col gap-4 relative z-10">
+            <div className="p-3 bg-emerald-950 rounded-2xl border border-emerald-850 text-emerald-400 self-start shadow-sm">
               <Cpu className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-slate-800 mb-2">Simulasi Stokastik Risiko & Kecukupan Anggaran</h3>
-              <p className="text-xs text-slate-500 leading-relaxed font-semibold">
-                Memproyeksikan 50 jalur ketidakpastian harga pangan eceran secara dinamis untuk mengukur probabilitas keberhasilan stabilisasi pasar serta dampaknya terhadap defisit neraca anggaran fiskal APBN.
+              <h3 className="text-lg font-black text-white mb-2">Simulasi Risiko Stokastik Monte Carlo</h3>
+              <p className="text-xs text-slate-300 leading-relaxed font-semibold">
+                Memproyasikan 50 jalur ketidakpastian harga pangan eceran secara dinamis untuk mengukur probabilitas keberhasilan stabilisasi pasar serta dampaknya terhadap defisit neraca anggaran fiskal APBN.
               </p>
             </div>
           </div>
 
           {/* SVG Mockup of Monte Carlo stochastic paths */}
-          <div className="w-full h-24 bg-slate-50 rounded-xl border border-slate-150 relative overflow-hidden flex items-center justify-center p-2">
+          <div className="w-full h-24 bg-[#01140c] rounded-xl border border-emerald-950 relative overflow-hidden flex items-center justify-center p-2 z-10">
             <svg className="w-full h-full" viewBox="0 0 200 60" fill="none">
               <path d="M10 30 Q 50 25, 100 20 T 190 10" stroke="rgba(16, 185, 129, 0.15)" strokeWidth="1" />
               <path d="M10 30 Q 50 35, 100 40 T 190 50" stroke="rgba(16, 185, 129, 0.15)" strokeWidth="1" />
               <path d="M10 30 Q 50 28, 100 25 T 190 22" stroke="rgba(16, 185, 129, 0.15)" strokeWidth="1" />
               <path d="M10 30 Q 50 32, 100 35 T 190 38" stroke="rgba(16, 185, 129, 0.15)" strokeWidth="1" />
-              <path d="M10 30 Q 50 30, 100 30 T 190 30" stroke="#064e3b" strokeWidth="2.5" />
+              <path d="M10 30 Q 50 30, 100 30 T 190 30" stroke="#10b981" strokeWidth="2.5" />
               <line x1="10" y1="18" x2="190" y2="18" stroke="#ef4444" strokeWidth="1" strokeDasharray="3,3" />
               <line x1="10" y1="42" x2="190" y2="42" stroke="#ef4444" strokeWidth="1" strokeDasharray="3,3" />
-              <text x="140" y="14" className="fill-red-500 font-mono text-[6px]">Target Bounds</text>
+              <text x="140" y="14" className="fill-red-500 font-mono text-[6px]">Batas Koridor Target</text>
             </svg>
           </div>
 
           {user ? (
-            <Link href="/dashboard/simulation" className="self-start">
-              <GradientButton variant="glass" className="text-xs px-4 font-bold">
-                Eksplorasi Simulasi &rarr;
+            <Link href="/dashboard/simulation" className="self-start relative z-10">
+              <GradientButton variant="emerald" className="text-xs px-4 font-bold">
+                Eksplorasi Hasil Simulasi &rarr;
               </GradientButton>
             </Link>
           ) : (
-            <button onClick={handleOpenLogin} className="self-start">
-              <GradientButton variant="glass" className="text-xs px-4 font-bold">
-                Eksplorasi Simulasi (Login) &rarr;
+            <button onClick={handleOpenLogin} className="self-start relative z-10">
+              <GradientButton variant="emerald" className="text-xs px-4 font-bold">
+                Eksplorasi Hasil Simulasi (Masuk) &rarr;
               </GradientButton>
             </button>
           )}
@@ -369,10 +381,10 @@ export default function Home() {
 
       </SectionWrapper>
 
-      {/* 5. SITABA REGIONAL WARNING SYSTEM PREVIEW */}
-      <SectionWrapper className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      {/* 6. SITABA REGIONAL WARNING SYSTEM PREVIEW */}
+      <SectionWrapper className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center relative z-10">
         <div className="flex flex-col gap-5">
-          <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block">SITABA GIS Integration</span>
+          <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block">Integrasi Peta Digital Keamanan Pangan</span>
           <h2 className="text-2xl sm:text-3xl font-black text-[#022c1b] leading-tight">
             Pemantauan Geografis Kerawanan Pasokan Daerah
           </h2>
@@ -387,8 +399,8 @@ export default function Home() {
             </Link>
           ) : (
             <button onClick={handleOpenLogin} className="self-start">
-              <GradientButton variant="indigo" className="text-xs">
-                Log In Untuk Buka Peta &rarr;
+              <GradientButton variant="indigo" className="text-xs font-bold">
+                Masuk Untuk Buka Peta &rarr;
               </GradientButton>
             </button>
           )}
@@ -408,17 +420,17 @@ export default function Home() {
             <path d="M100 32 L115 32 L115 36 L105 40 L112 50 L100 46 L95 38 Z" fill="#d1fae5" stroke="#10b981" strokeWidth="0.5" />
             {/* Papua */}
             <path d="M140 35 L160 33 L175 40 L175 55 L155 53 L140 42 Z" fill="#fee2e2" stroke="#ef4444" strokeWidth="0.5" />
-            <text x="145" y="46" className="fill-red-800 text-[5px] font-bold">PAPUA: DARURAT</text>
-            <text x="45" y="75" className="fill-emerald-800 text-[5px] font-bold">JAWA: AMAN</text>
+            <text x="145" y="46" className="fill-red-800 text-[5.5px] font-black uppercase">PAPUA: DARURAT</text>
+            <text x="45" y="75" className="fill-emerald-800 text-[5.5px] font-black uppercase">JAWA: AMAN</text>
           </svg>
         </div>
       </SectionWrapper>
 
-      {/* 6. FULL-WIDTH TEXT & FEATURES */}
-      <SectionWrapper className="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-6 items-center text-center">
+      {/* 7. FULL-WIDTH TEXT & FEATURES */}
+      <SectionWrapper className="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-6 items-center text-center relative z-10">
         <div className="max-w-2xl flex flex-col gap-2">
-          <h2 className="text-xl sm:text-2xl font-black text-slate-800">
-            No shortcuts. Just expert economic forecasting you can count on.
+          <h2 className="text-xl sm:text-2xl font-black text-slate-800 leading-snug">
+            Akurasi Ilmiah. Pemodelan Profesional yang Dapat Diandalkan.
           </h2>
           <p className="text-xs text-slate-455 font-bold uppercase tracking-wider">
             Standar Keamanan Pangan & Tata Kelola Keuangan Negara Berkelanjutan

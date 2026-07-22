@@ -187,7 +187,7 @@ export default function AIChatbot() {
         replyText = 'Hasil simulasi Monte Carlo untuk kuota impor beras 1.0 Juta Ton dengan alokasi Bulog 50% menunjukkan sebaran kestabilan sebagai berikut:';
         chartType = 'montecarlo';
       } else if (query.includes('eli5') || query.includes('jelaskan') || query.includes('anak kecil')) {
-        replyText = '👶 *ELI5 (Sederhananya)*:\n\nKalau harga cabai rawit naik, inflasi makanan ikut naik karena hampir semua masakan Indonesia pakai cabai. Karena semua orang butuh beli cabai setiap hari, naiknya harga cabai bikin dompet cepat kosong untuk membeli makanan pokok lainnya. Inilah yang disebut BPS sebagai inflasi volatile food!';
+        replyText = 'Penjelasan Sederhana:\n\nKalau harga cabai rawit naik, inflasi makanan ikut naik karena hampir semua masakan Indonesia pakai cabai. Karena semua orang butuh beli cabai setiap hari, naiknya harga cabai bikin dompet cepat kosong untuk membeli makanan pokok lainnya. Inilah yang disebut BPS sebagai inflasi volatile food!';
       } else if (query.includes('kuis') || query.includes('quiz') || query.includes('mulai')) {
         replyText = 'Ayo uji pemahaman Anda lewat kuis chat mini ini! Silakan pilih jawaban Anda pada panel interaktif di bawah:';
         miniQuiz = {

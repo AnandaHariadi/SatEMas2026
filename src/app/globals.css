@@ -53,7 +53,7 @@
 
 /* Custom Brand Gradients */
 .text-gradient {
-  background: linear-gradient(135deg, #064e3b 0%, #10b981 50%, #34d399 100%);
+  background: linear-gradient(135deg, #022c1b 0%, #10b981 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
