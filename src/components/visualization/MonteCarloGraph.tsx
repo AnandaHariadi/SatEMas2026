@@ -129,7 +129,7 @@ export default function MonteCarloGraph({ simulationData }: MonteCarloGraphProps
             ) {
               return `${context.dataset.label}: ${context.parsed.y}%`;
             }
-            return null;
+            return undefined;
           }
         }
       }
