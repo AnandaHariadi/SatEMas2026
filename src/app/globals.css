@@ -103,8 +103,4 @@
   }
 }
 
-/* Custom Leaflet Green GIS Theme */
-.leaflet-green-theme .leaflet-tile {
-  filter: grayscale(1) sepia(0.8) hue-rotate(85deg) saturate(1.8) brightness(0.95) contrast(1.1) !important;
-}
 

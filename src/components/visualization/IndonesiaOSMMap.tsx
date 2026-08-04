@@ -79,13 +79,13 @@ export default function IndonesiaOSMMap({ onRegionSelect, selectedRegionId }: In
   };
 
   return (
-    <div className="w-full bg-[#0b0f19] rounded-2xl border border-slate-800 overflow-hidden shadow-2xl relative z-10 font-sans leaflet-green-theme">
+    <div className="w-full bg-[#0b0f19] rounded-2xl border border-slate-800 overflow-hidden shadow-2xl relative z-10 font-sans">
       
       {/* Mapbox Style Top Command Ribbon */}
       <div className="bg-[#0b0f19] border-b border-slate-800 px-5 py-3 flex justify-between items-center text-[10px] text-slate-400 font-mono tracking-wider">
         <div className="flex items-center gap-3">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-          <span>SISTEM GEOSPASIAL PANGAN AKTIF (GREEN RADAR MODULE)</span>
+          <span>SISTEM GEOSPASIAL PANGAN AKTIF (OPENSTREETMAP MODULE)</span>
         </div>
         <div className="hidden sm:flex items-center gap-4 text-[9px] text-slate-500 font-bold">
           <span>TAMPILAN: VEKTOR JALAN & ALARM FISKAL</span>
@@ -101,10 +101,10 @@ export default function IndonesiaOSMMap({ onRegionSelect, selectedRegionId }: In
           className="w-full h-[500px]"
           zoomControl={true}
         >
-          {/* Mapbox Positron light style tiles - styled green via leaflet-green-theme filter */}
+          {/* Standard Detailed OpenStreetMap Tiles */}
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
           {/* Layer 1: Peta Kerawanan Inflasi */}

@@ -556,20 +556,20 @@ export default function Home() {
         </div>
       </SectionWrapper>
 
-      {/* 8. LUXURIOUS DEEP FOREST GREEN TATA KELOLA MATRIX SECTION (Absolute visual masterpiece, no icons) */}
+      {/* 8. LUXURIOUS DEEP SLATE/CHARCOAL TATA KELOLA MATRIX SECTION (Slate/Charcoal theme) */}
       <SectionWrapper className="w-full relative z-10">
-        <div className="bg-gradient-to-tr from-[#021f13] to-[#05321f] text-white p-8 sm:p-14 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col gap-10 border border-emerald-950">
+        <div className="bg-gradient-to-tr from-slate-900 to-slate-950 text-white p-8 sm:p-14 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col gap-10 border border-slate-800">
           
           {/* Subtle coordinates grid lines within matrix block */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
           
           {/* Header */}
-          <div className="relative z-10 flex flex-col gap-2 max-w-2xl border-b border-emerald-900/60 pb-6">
-            <span className="text-[9px] font-mono tracking-widest font-black uppercase text-emerald-455">[ MATRIKS STANDAR TATA KELOLA ]</span>
+          <div className="relative z-10 flex flex-col gap-2 max-w-2xl border-b border-slate-800 pb-6">
+            <span className="text-[9px] font-mono tracking-widest font-black uppercase text-emerald-400">[ MATRIKS STANDAR TATA KELOLA ]</span>
             <h2 className="text-xl sm:text-3xl font-black text-white leading-snug">
-              Akurasi Ilmiah & Tata Kelola Keuangan Negara Berkelanjutan
+              Akurasi Ilmiah &amp; Tata Kelola Keuangan Negara Berkelanjutan
             </h2>
-            <p className="text-xs text-slate-350 font-medium leading-relaxed mt-1">
+            <p className="text-xs text-slate-400 font-medium leading-relaxed mt-1">
               Metodologi integrasi data ekonometrika pangan eceran BPS-SP2KP diselaraskan untuk mengawal batas aman belanja APBN.
             </p>
           </div>
@@ -578,9 +578,9 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
             
             {/* Card 1 */}
-            <div className="bg-emerald-950/45 border border-emerald-900/60 p-6 rounded-2xl flex flex-col justify-between hover:border-[#10b981] hover:bg-emerald-950/65 transition-all duration-300 min-h-[180px] shadow-sm">
+            <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between hover:border-emerald-500/50 hover:bg-slate-900/90 transition-all duration-300 min-h-[180px] shadow-sm">
               <div className="flex flex-col gap-3">
-                <span className="w-8 h-8 rounded-full bg-emerald-900/80 border border-emerald-800 flex items-center justify-center text-[10px] font-mono font-bold text-emerald-450">
+                <span className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-mono font-bold text-emerald-400">
                   01
                 </span>
                 <h3 className="text-sm font-black text-white">Stabilitas Cadangan Pangan</h3>
@@ -591,9 +591,9 @@ export default function Home() {
             </div>
 
             {/* Card 2 */}
-            <div className="bg-emerald-950/45 border border-emerald-900/60 p-6 rounded-2xl flex flex-col justify-between hover:border-[#10b981] hover:bg-emerald-950/65 transition-all duration-300 min-h-[180px] shadow-sm">
+            <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between hover:border-emerald-500/50 hover:bg-slate-900/90 transition-all duration-300 min-h-[180px] shadow-sm">
               <div className="flex flex-col gap-3">
-                <span className="w-8 h-8 rounded-full bg-emerald-900/80 border border-emerald-800 flex items-center justify-center text-[10px] font-mono font-bold text-emerald-400">
+                <span className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-mono font-bold text-emerald-400">
                   02
                 </span>
                 <h3 className="text-sm font-black text-white">Mitigasi Volatilitas Pasar</h3>
@@ -604,9 +604,9 @@ export default function Home() {
             </div>
 
             {/* Card 3 */}
-            <div className="bg-emerald-950/45 border border-emerald-900/60 p-6 rounded-2xl flex flex-col justify-between hover:border-[#10b981] hover:bg-emerald-950/65 transition-all duration-300 min-h-[180px] shadow-sm">
+            <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between hover:border-emerald-500/50 hover:bg-slate-900/90 transition-all duration-300 min-h-[180px] shadow-sm">
               <div className="flex flex-col gap-3">
-                <span className="w-8 h-8 rounded-full bg-emerald-900/80 border border-emerald-800 flex items-center justify-center text-[10px] font-mono font-bold text-emerald-400">
+                <span className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-mono font-bold text-emerald-400">
                   03
                 </span>
                 <h3 className="text-sm font-black text-white">Literasi Keuangan Pangan</h3>
