@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
   ShieldCheck, LogIn, LogOut, Wallet, Eye, EyeOff,
-  Globe, PhoneCall, X, Menu, Activity
+  Globe, PhoneCall, X, Menu, ArrowRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth, UserProfile } from '@/lib/AuthContext';
@@ -82,19 +82,19 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Floating Pill Glassmorphism Header Bar */}
+      {/* Floating Header Container */}
       <header className="fixed top-0 left-0 right-0 z-45 flex flex-col items-center px-4 pt-3 pointer-events-none">
         
         <nav className={`pointer-events-auto w-full max-w-7xl mx-auto rounded-full transition-all duration-300 ${
           scrolled 
-            ? 'bg-white/90 backdrop-blur-xl border border-slate-200/90 shadow-xl py-2.5 px-6' 
-            : 'bg-white/80 backdrop-blur-md border border-slate-200/60 shadow-md py-3 px-6'
+            ? 'bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl py-2.5 px-6' 
+            : 'bg-white/85 backdrop-blur-md border border-slate-200/70 shadow-md py-3.5 px-6'
         }`}>
           <div className="flex justify-between items-center">
             
-            {/* Brand Logo & Tag */}
+            {/* Brand Logo */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#022c1b] via-[#05321f] to-[#10b981] flex items-center justify-center text-white font-black text-base shadow-md group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#022c1b] via-[#05321f] to-[#10b981] flex items-center justify-center text-white font-black text-lg shadow-md group-hover:scale-105 transition-transform">
                 S
               </div>
               <div className="flex flex-col">
@@ -111,7 +111,7 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Navigation Links */}
-            <div className="hidden md:flex items-center gap-1 bg-slate-100/80 p-1 rounded-full border border-slate-200/60">
+            <div className="hidden md:flex items-center gap-1 bg-slate-100/90 p-1.5 rounded-full border border-slate-200/80">
               {navLinks.map((link) => {
                 const active = isActive(link.href);
                 return (
@@ -121,7 +121,7 @@ export default function Navbar() {
                     className={`px-4 py-1.5 text-xs font-bold rounded-full transition-all duration-200 ${
                       active
                         ? 'bg-[#022c1b] text-white shadow-sm font-black'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-white'
                     }`}
                   >
                     {link.name}
@@ -130,7 +130,7 @@ export default function Navbar() {
               })}
             </div>
 
-            {/* Right Action / User Profile */}
+            {/* Right Action / Profile */}
             <div className="hidden md:flex items-center gap-3">
               {user ? (
                 <div className="flex items-center gap-3">
@@ -170,7 +170,7 @@ export default function Navbar() {
                 <GradientButton 
                   variant="emerald" 
                   onClick={() => setIsLoginOpen(true)}
-                  className="text-xs py-2 px-5 rounded-full flex items-center gap-1.5 font-bold shadow-md shadow-emerald-500/10"
+                  className="text-xs py-2.5 px-5 rounded-full flex items-center gap-1.5 font-bold shadow-md shadow-emerald-500/10"
                 >
                   <LogIn className="w-3.5 h-3.5" /> Masuk Portal
                 </GradientButton>
@@ -250,8 +250,8 @@ export default function Navbar() {
 
       </header>
 
-      {/* Spacer to push page body down */}
-      <div className="h-[75px]" />
+      {/* Spacer */}
+      <div className="h-[80px]" />
 
       {/* POPUP LOGIN OVERLAY DIALOG */}
       <AnimatePresence>
