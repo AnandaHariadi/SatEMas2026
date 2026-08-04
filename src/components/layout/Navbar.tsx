@@ -4,9 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
-  Layers, Menu, X, ShieldCheck, 
-  LogIn, LogOut, Wallet, Eye, EyeOff,
-  Globe, Search, PhoneCall, ChevronDown
+  ShieldCheck, LogIn, LogOut, Wallet, Eye, EyeOff,
+  Globe, PhoneCall, X, Menu, Activity
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth, UserProfile } from '@/lib/AuthContext';
@@ -37,13 +36,12 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Navigation links following Pertamina's clean structural placement
   const navLinks = user 
     ? [
-        { name: 'Dashboard Utama', href: '/dashboard' },
-        { name: 'Studio Peramalan', href: '/dashboard/prediction' },
+        { name: 'Dashboard', href: '/dashboard' },
+        { name: 'Studio ARIMA', href: '/dashboard/prediction' },
         { name: 'Simulator APBN', href: '/dashboard/simulation' },
-        { name: 'Peta Geospasial', href: '/dashboard/map' },
+        { name: 'Peta SITABA', href: '/dashboard/map' },
         { name: 'Edukasi Pangan', href: '/dashboard/learning' }
       ]
     : [
@@ -84,209 +82,178 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-45 flex flex-col">
+      {/* Floating Pill Glassmorphism Header Bar */}
+      <header className="fixed top-0 left-0 right-0 z-45 flex flex-col items-center px-4 pt-3 pointer-events-none">
         
-        {/* PERTAMINA STYLE TIER 1: Top Mini Utility Ribbon */}
-        <div className="bg-[#0b0f19] text-white py-1.5 px-4 border-b border-slate-800 text-[10px] font-mono hidden md:block">
-          <div className="max-w-7xl mx-auto flex justify-between items-center">
-            
-            <div className="flex items-center gap-4 text-slate-300 font-semibold">
-              <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                PORTAL KETAHANAN PANGAN NASIONAL REPUBLIK INDONESIA
-              </span>
-              <span className="text-slate-700">|</span>
-              <span className="text-slate-400">INTEGRASI DATA BPS SP2KP, BULOG &amp; BANK INDONESIA</span>
-            </div>
-
-            <div className="flex items-center gap-5 text-slate-400">
-              <span className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer">
-                <Globe className="w-3 h-3 text-emerald-400" /> INDONESIA (ID)
-              </span>
-              <span className="text-slate-700">|</span>
-              <a href="#fitur" className="hover:text-emerald-400 transition-colors">PUBLIKASI KEMENKEU</a>
-              <span className="text-slate-700">|</span>
-              <button 
-                onClick={() => alert("Layanan Informasi Pubdok SATRISNA BPS: Call Center 1500-000")}
-                className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer"
-              >
-                <PhoneCall className="w-3 h-3 text-amber-400" /> CONTACT CENTER
-              </button>
-            </div>
-
-          </div>
-        </div>
-
-        {/* PERTAMINA STYLE TIER 2: Main Navigation Header */}
-        <nav className={`w-full transition-all duration-300 ${
+        <nav className={`pointer-events-auto w-full max-w-7xl mx-auto rounded-full transition-all duration-300 ${
           scrolled 
-            ? 'py-3 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-md' 
-            : 'py-4 bg-white border-b border-slate-150'
+            ? 'bg-white/90 backdrop-blur-xl border border-slate-200/90 shadow-xl py-2.5 px-6' 
+            : 'bg-white/80 backdrop-blur-md border border-slate-200/60 shadow-md py-3 px-6'
         }`}>
-          {/* Signature Pertamina Red-Green Accent Bar */}
-          <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-red-600 via-[#10b981] to-amber-400" />
-
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center">
-              
-              {/* Institutional Logo & Brand Emblem */}
-              <Link href="/" className="flex items-center gap-3 group">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#022c1b] via-[#05321f] to-[#10b981] flex items-center justify-center text-white font-black text-lg shadow-md group-hover:scale-105 transition-transform">
-                  S
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-lg font-black tracking-wider text-[#022c1b] group-hover:text-emerald-700 transition-colors uppercase leading-none">
+          <div className="flex justify-between items-center">
+            
+            {/* Brand Logo & Tag */}
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#022c1b] via-[#05321f] to-[#10b981] flex items-center justify-center text-white font-black text-base shadow-md group-hover:scale-105 transition-transform">
+                S
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base font-black tracking-wider text-[#022c1b] group-hover:text-emerald-700 transition-colors uppercase leading-none">
                     SATRISNA
                   </span>
-                  <span className="text-[9px] text-slate-500 font-bold tracking-wider uppercase flex items-center gap-1 mt-0.5">
-                    <ShieldCheck className="w-3 h-3 text-[#10b981]" /> Portal Stabilitas Nasional
-                  </span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
                 </div>
-              </Link>
-
-              {/* Desktop Navigation Link Items (Pertamina Placement) */}
-              <div className="hidden md:flex items-center gap-7">
-                {navLinks.map((link) => {
-                  const active = isActive(link.href);
-                  return (
-                    <Link
-                      key={link.name}
-                      href={link.href}
-                      className={`text-xs font-black uppercase tracking-wider transition-all duration-200 border-b-2 py-1 ${
-                        active
-                          ? 'text-[#022c1b] border-[#022c1b]'
-                          : 'text-slate-600 border-transparent hover:text-[#10b981] hover:border-slate-300'
-                      }`}
-                    >
-                      {link.name}
-                    </Link>
-                  );
-                })}
-
-                {/* User Status / Login Portal Action */}
-                {user ? (
-                  <div className="flex items-center gap-3 pl-4 border-l border-slate-200">
-                    <div className="flex flex-col text-right">
-                      <span className="text-xs font-extrabold text-[#022c1b] line-clamp-1 max-w-[140px]">{user.name}</span>
-                      <span className="text-[8px] text-slate-450 font-bold uppercase">{user.role}</span>
-                    </div>
-                    
-                    <div className="relative group/avatar">
-                      <button className="w-9 h-9 rounded-full bg-emerald-50 border-2 border-[#10b981] flex items-center justify-center text-xs font-black text-[#022c1b] cursor-pointer hover:bg-emerald-100 transition-colors shadow-sm">
-                        {user.name.substring(0, 2).toUpperCase()}
-                      </button>
-                      
-                      <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl py-2 hidden group-hover/avatar:block z-50">
-                        <div className="px-4 py-2 border-b border-slate-100 text-xs flex flex-col gap-0.5">
-                          <span className="font-bold text-[#022c1b]">{user.name}</span>
-                          <span className="text-[9px] text-slate-400 font-mono">NIP: {user.nipOrId}</span>
-                        </div>
-                        
-                        <div className="px-4 py-2 flex justify-between items-center text-[10px] text-slate-600 border-b border-slate-100">
-                          <span className="flex items-center gap-1 font-bold">
-                            <Wallet className="w-3.5 h-3.5 text-emerald-700" /> Saldo Poin:
-                          </span>
-                          <span className="font-extrabold text-emerald-800">{user.points} Pts</span>
-                        </div>
-
-                        <button 
-                          onClick={logout}
-                          className="w-full text-left px-4 py-2.5 hover:bg-red-50 text-xs font-bold text-red-600 flex items-center gap-2 cursor-pointer transition-colors"
-                        >
-                          <LogOut className="w-4 h-4" /> Keluar Portal
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <GradientButton 
-                    variant="emerald" 
-                    onClick={() => setIsLoginOpen(true)}
-                    className="text-xs py-2.5 px-5 flex items-center gap-2 font-bold shadow-md shadow-emerald-500/10"
-                  >
-                    <LogIn className="w-3.5 h-3.5" /> Masuk Portal
-                  </GradientButton>
-                )}
+                <span className="text-[8px] text-slate-400 font-bold tracking-widest uppercase flex items-center gap-1 mt-0.5">
+                  <ShieldCheck className="w-3 h-3 text-[#10b981]" /> Portal Stabilitas Nasional
+                </span>
               </div>
+            </Link>
 
-              {/* Mobile Drawer Trigger Button */}
-              <div className="md:hidden flex items-center gap-3">
-                {user && (
-                  <button className="w-8 h-8 rounded-full bg-emerald-50 border border-emerald-300 flex items-center justify-center text-xs font-black text-[#022c1b]">
-                    {user.name.substring(0, 2).toUpperCase()}
-                  </button>
-                )}
-                <button
-                  onClick={() => setIsOpen(!isOpen)}
-                  className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all cursor-pointer border border-slate-200"
-                >
-                  {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                </button>
-              </div>
-
-            </div>
-          </div>
-
-          {/* Mobile Navigation Drawer */}
-          {isOpen && (
-            <div className="md:hidden bg-white border-b border-slate-200 py-4 px-4 flex flex-col gap-2 shadow-lg">
+            {/* Desktop Navigation Links */}
+            <div className="hidden md:flex items-center gap-1 bg-slate-100/80 p-1 rounded-full border border-slate-200/60">
               {navLinks.map((link) => {
                 const active = isActive(link.href);
                 return (
                   <Link
                     key={link.name}
                     href={link.href}
-                    onClick={() => setIsOpen(false)}
-                    className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                    className={`px-4 py-1.5 text-xs font-bold rounded-full transition-all duration-200 ${
                       active
-                        ? 'text-[#022c1b] bg-emerald-50/60 font-black'
-                        : 'text-slate-600 hover:bg-slate-50'
+                        ? 'bg-[#022c1b] text-white shadow-sm font-black'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
                     }`}
                   >
                     {link.name}
                   </Link>
                 );
               })}
-              
-              <div className="pt-3 border-t border-slate-100">
-                {user ? (
-                  <div className="flex flex-col gap-3">
-                    <div className="px-4 text-xs font-semibold text-slate-500">
-                      NIP: <span className="font-mono">{user.nipOrId}</span>
-                    </div>
-                    <button 
-                      onClick={() => {
-                        logout();
-                        setIsOpen(false);
-                      }}
-                      className="w-full text-center py-2.5 rounded-xl border border-red-200 text-xs font-bold text-red-600 flex items-center justify-center gap-1 hover:bg-red-50 transition-colors cursor-pointer"
-                    >
-                      <LogOut className="w-4 h-4" /> Keluar Portal
-                    </button>
-                  </div>
-                ) : (
-                  <GradientButton 
-                    variant="emerald" 
-                    onClick={() => {
-                      setIsOpen(false);
-                      setIsLoginOpen(true);
-                    }}
-                    className="w-full text-xs py-3"
-                  >
-                    <LogIn className="w-4 h-4" /> Masuk Portal Penstabil
-                  </GradientButton>
-                )}
-              </div>
             </div>
-          )}
+
+            {/* Right Action / User Profile */}
+            <div className="hidden md:flex items-center gap-3">
+              {user ? (
+                <div className="flex items-center gap-3">
+                  <div className="flex flex-col text-right">
+                    <span className="text-xs font-black text-[#022c1b] line-clamp-1 max-w-[130px]">{user.name}</span>
+                    <span className="text-[8px] text-slate-450 font-bold uppercase">{user.role}</span>
+                  </div>
+                  
+                  <div className="relative group/avatar">
+                    <button className="w-9 h-9 rounded-full bg-emerald-50 border-2 border-[#10b981] flex items-center justify-center text-xs font-black text-[#022c1b] cursor-pointer hover:bg-emerald-100 transition-colors shadow-sm">
+                      {user.name.substring(0, 2).toUpperCase()}
+                    </button>
+                    
+                    <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl py-2 hidden group-hover/avatar:block z-50">
+                      <div className="px-4 py-2 border-b border-slate-100 text-xs flex flex-col gap-0.5">
+                        <span className="font-bold text-[#022c1b]">{user.name}</span>
+                        <span className="text-[9px] text-slate-400 font-mono">NIP: {user.nipOrId}</span>
+                      </div>
+                      
+                      <div className="px-4 py-2 flex justify-between items-center text-[10px] text-slate-600 border-b border-slate-100">
+                        <span className="flex items-center gap-1 font-bold">
+                          <Wallet className="w-3.5 h-3.5 text-emerald-700" /> Saldo Poin:
+                        </span>
+                        <span className="font-extrabold text-emerald-800">{user.points} Pts</span>
+                      </div>
+
+                      <button 
+                        onClick={logout}
+                        className="w-full text-left px-4 py-2.5 hover:bg-red-50 text-xs font-bold text-red-600 flex items-center gap-2 cursor-pointer transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" /> Keluar Portal
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <GradientButton 
+                  variant="emerald" 
+                  onClick={() => setIsLoginOpen(true)}
+                  className="text-xs py-2 px-5 rounded-full flex items-center gap-1.5 font-bold shadow-md shadow-emerald-500/10"
+                >
+                  <LogIn className="w-3.5 h-3.5" /> Masuk Portal
+                </GradientButton>
+              )}
+            </div>
+
+            {/* Mobile Drawer Trigger */}
+            <div className="md:hidden flex items-center gap-2">
+              {user && (
+                <button className="w-8 h-8 rounded-full bg-emerald-50 border border-emerald-300 flex items-center justify-center text-xs font-black text-[#022c1b]">
+                  {user.name.substring(0, 2).toUpperCase()}
+                </button>
+              )}
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-2 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all cursor-pointer border border-slate-200"
+              >
+                {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
+
+          </div>
         </nav>
+
+        {/* Mobile Navigation Drawer */}
+        {isOpen && (
+          <div className="pointer-events-auto md:hidden w-full max-w-7xl mx-auto mt-2 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-3xl p-4 flex flex-col gap-2 shadow-xl">
+            {navLinks.map((link) => {
+              const active = isActive(link.href);
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition-all ${
+                    active
+                      ? 'text-[#022c1b] bg-emerald-50/80 font-black'
+                      : 'text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
+            
+            <div className="pt-3 border-t border-slate-100">
+              {user ? (
+                <div className="flex flex-col gap-3">
+                  <div className="px-4 text-xs font-semibold text-slate-500">
+                    NIP: <span className="font-mono">{user.nipOrId}</span>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      logout();
+                      setIsOpen(false);
+                    }}
+                    className="w-full text-center py-2.5 rounded-2xl border border-red-200 text-xs font-bold text-red-600 flex items-center justify-center gap-1 hover:bg-red-50 transition-colors cursor-pointer"
+                  >
+                    <LogOut className="w-4 h-4" /> Keluar Portal
+                  </button>
+                </div>
+              ) : (
+                <GradientButton 
+                  variant="emerald" 
+                  onClick={() => {
+                    setIsOpen(false);
+                    setIsLoginOpen(true);
+                  }}
+                  className="w-full text-xs py-3 rounded-2xl"
+                >
+                  <LogIn className="w-4 h-4" /> Masuk Portal Penstabil
+                </GradientButton>
+              )}
+            </div>
+          </div>
+        )}
 
       </header>
 
-      {/* Spacer to push body content down below the two-tier fixed header */}
-      <div className="h-[75px] md:h-[105px]" />
+      {/* Spacer to push page body down */}
+      <div className="h-[75px]" />
 
-      {/* POPUP LOGIN OVERLAY DIALOG (Split-Screen Layout inspired by SITABA PU & Pertamina) */}
+      {/* POPUP LOGIN OVERLAY DIALOG */}
       <AnimatePresence>
         {isLoginOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/65 backdrop-blur-sm p-4">
@@ -297,7 +264,7 @@ export default function Navbar() {
               className="bg-white border border-slate-200 w-full max-w-[850px] h-auto md:h-[540px] rounded-3xl shadow-2xl p-0 flex flex-col md:flex-row overflow-hidden relative"
             >
               
-              {/* Left Column: Dark Forest-Green Branding & Isometric SVG Illustration */}
+              {/* Left Column */}
               <div className="w-full md:w-[42%] bg-gradient-to-tr from-[#021f13] to-[#05321f] text-white p-8 flex flex-col justify-between relative overflow-hidden hidden md:flex border-r border-emerald-950/20">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:28px_28px] pointer-events-none" />
                 
@@ -309,7 +276,6 @@ export default function Navbar() {
                   </p>
                 </div>
 
-                {/* Isometric SVG Analyst Workspace Illustration */}
                 <div className="w-full flex justify-center items-center my-6 relative z-10">
                   <svg className="w-full max-w-[210px] h-[170px]" viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10 120 L90 80 L190 120 L90 160 Z" fill="#01100a" stroke="#062e1c" strokeWidth="1.5" />
@@ -336,7 +302,7 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {/* Right Column: Modern Login Form */}
+              {/* Right Column */}
               <div className="w-full md:w-[58%] flex flex-col justify-between p-6 sm:p-8 bg-white relative">
                 
                 <button 
